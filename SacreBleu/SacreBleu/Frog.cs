@@ -3,38 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-namespace SacreBleu.GameObjects
+namespace SacreBleu
 {
-	class Frog : GameObject
+	public class Frog
 	{
-		//Vector2 frogPosition;
+		Vector2 frogPosition;
 		Vector2 frogVelocity;
 		Vector2 initPosition, finalPosition;
 		float Xoffset, Yoffset;
-		//Rectangle bbox;
+		Rectangle bbox;
 		bool dragging,released;
 
-		Rectangle r;
-		Vector2 v;
-		float angle;
-		//Vector2 position;
-		//Texture2D frogSprite;
-
-		/// <summary>
-		/// Constructor for frog class
-		/// </summary>
-		/// <param name="sprite"></param>
-		/// <param name="position"></param>
-		public Frog(Vector2 position, SpriteBatch spriteBatch, Texture2D sprite) : base(position,spriteBatch,sprite)
-		{
-			_tag = "frog";
-			
-			Start();
-		}
+		public Vector2 position;
+		public Texture2D frogSprite;
 
 
 		/// <summary>
@@ -42,24 +26,34 @@ namespace SacreBleu.GameObjects
 		/// This is called from LoadContent of Game1.cs
 		/// </summary>
 		public void Start() {
-			initPosition = _position;
+			initPosition = frogPosition;
 			dragging = false;
 			released = false;
 			
 		}
 
-		
+		/// <summary>
+		/// Constructor for frog class
+		/// </summary>
+		/// <param name="sprite"></param>
+		/// <param name="position"></param>
+		public Frog(Texture2D sprite, Vector2 position)
+		{
+			frogSprite = sprite;
+			frogPosition = position;
+			bbox = new Rectangle((int)position.X - sprite.Width / 2, (int)position.Y - sprite.Height / 2, sprite.Width, sprite.Height);
+		}
 
 
 		public void Update(GameTime gameTime)
 		{
 
-			
+			bbox = new Rectangle((int)frogPosition.X - frogSprite.Width / 2, (int)frogPosition.Y - frogSprite.Height / 2, frogSprite.Width, frogSprite.Height);
 
 			MouseState mouseState = Mouse.GetState();
 
 
-			bool inRange = _bounds.Contains(new Point((int)mouseState.X, (int)mouseState.Y));
+			bool inRange = bbox.Contains(new Point((int)mouseState.X, (int)mouseState.Y));
 		     
 
 			if (SacreBleuGame.currentState == Gamestates.READY)  // This is to drag frog
@@ -69,15 +63,15 @@ namespace SacreBleu.GameObjects
 				{
 
 					dragging = true;
-					Vector2 end = new Vector2(mouseState.X, mouseState.Y);
-					dragLine(initPosition,end,Color.Black,1);
+					
+					dragFrog(new Vector2(mouseState.X, mouseState.Y));
 					
 				}
 
 
 				if ((mouseState.LeftButton == ButtonState.Released )&& dragging)
 				{
-					finalPosition = new Vector2(mouseState.X,mouseState.Y);
+					finalPosition = frogPosition;
 					Xoffset = finalPosition.X - initPosition.X;
 					Yoffset = finalPosition.Y - initPosition.Y;
 					Xoffset *= 3;
@@ -102,25 +96,19 @@ namespace SacreBleu.GameObjects
 
 		}
 
-		
-
-		void dragLine( Vector2 begin, Vector2 end, Color color, int width = 1)
+		void dragFrog(Vector2 position)
 		{
-			 r = new Rectangle((int)begin.X, (int)begin.Y, (int)(end - begin).Length() + width, width);
-			 v = Vector2.Normalize(begin - end);
-			 angle = (float)Math.Acos(Vector2.Dot(v, -Vector2.UnitX));
-			if (begin.Y > end.Y) { angle = MathHelper.TwoPi - angle;
-				
-			}
-			_spriteBatch.Begin();
-			_spriteBatch.Draw(_sprite, r, null, Color.White, angle, Vector2.Zero, SpriteEffects.None, 0);
-			_spriteBatch.End();
+			if (dragging)
+			{
 
+				frogPosition = position ;
+
+			}
 		}
 
 		void releaseFrog(GameTime gameTime) {
-			_position.X -= frogVelocity.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
-			_position.Y -= frogVelocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
+			frogPosition.X -= frogVelocity.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
+			frogPosition.Y -= frogVelocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
 			Xoffset -= 2;
 			Yoffset -= 4;
 
@@ -129,10 +117,7 @@ namespace SacreBleu.GameObjects
 		 
 		public void draw(SpriteBatch spritebatch)
 		{
-			base.Draw();
-			
-			
-			//spritebatch.Draw(frogSprite, _position, Color.White);
+			spritebatch.Draw(frogSprite, frogPosition, Color.White);
 
 		}
 
