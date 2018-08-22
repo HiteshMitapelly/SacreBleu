@@ -10,6 +10,7 @@ namespace SacreBleu
 {
 	public class Frog
 	{
+		float testVariable;
 		Vector2 frogPosition;
 		Vector2 frogVelocity;
 		Vector2 initPosition, finalPosition;
