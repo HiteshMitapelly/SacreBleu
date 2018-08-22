@@ -4,15 +4,23 @@ using Microsoft.Xna.Framework.Input;
 
 namespace SacreBleu
 {
-    /// <summary>
-    /// This is the main type for your game.
-    /// </summary>
+	/// <summary>
+	/// This is the main type for your game.
+	/// </summary>
+	public enum Gamestates { PAUSED, READY, RELEASED}
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+		Texture2D frogTexture;
+		Frog frogObject;
+		Vector2 frogPosition;
+
+
+		public static Gamestates currentState;
         
-        public Game1()
+			
+		public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -26,9 +34,10 @@ namespace SacreBleu
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
-            base.Initialize();
+			// TODO: Add your initialization logic here
+			this.IsMouseVisible = true;
+			
+			base.Initialize();
         }
 
         /// <summary>
@@ -40,8 +49,13 @@ namespace SacreBleu
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
-        }
+			// TODO: use this.Content to load your game content here
+			frogPosition = new Vector2(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2);
+			currentState = Gamestates.READY;
+			frogTexture = Content.Load<Texture2D>("ball");
+			frogObject = new Frog(frogTexture, frogPosition);
+			frogObject.Start();
+		}
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -62,8 +76,9 @@ namespace SacreBleu
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+			// TODO: Add your update logic here
 
+			frogObject.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -75,7 +90,10 @@ namespace SacreBleu
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+			// TODO: Add your drawing code here
+			spriteBatch.Begin();
+			frogObject.draw(spriteBatch);
+			spriteBatch.End();
 
             base.Draw(gameTime);
         }
