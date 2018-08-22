@@ -43,7 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Frog.cs" />
-    <Compile Include="Game1.cs" />
+    <Compile Include="SacreBleuGame.cs" />
     <Compile Include="GameObjects\GameObject.cs" />
     <Compile Include="GameObjects\Hazard.cs" />
     <Compile Include="GameObjects\Obstacle.cs" />

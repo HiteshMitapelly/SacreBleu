@@ -56,7 +56,7 @@ namespace SacreBleu
 			bool inRange = bbox.Contains(new Point((int)mouseState.X, (int)mouseState.Y));
 		     
 
-			if (Game1.currentState == Gamestates.READY)  // This is to drag frog
+			if (SacreBleuGame.currentState == Gamestates.READY)  // This is to drag frog
 			{
 				
 				if ((mouseState.LeftButton == ButtonState.Pressed) && inRange)
@@ -78,12 +78,12 @@ namespace SacreBleu
 					Yoffset *= 3;
 					frogVelocity = new Vector2(Xoffset, Yoffset);
 
-					Game1.currentState = Gamestates.RELEASED;
+					SacreBleuGame.currentState = Gamestates.RELEASED;
 					dragging = false;
 				}
 			}
 
-			if ((Game1.currentState == Gamestates.RELEASED) && !dragging) // This is to release frog
+			if ((SacreBleuGame.currentState == Gamestates.RELEASED) && !dragging) // This is to release frog
 			{
 
 				released = true;
