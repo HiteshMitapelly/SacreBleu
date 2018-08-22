@@ -18,8 +18,8 @@ namespace SacreBleu.GameObjects
         private Vector2 MovementDirection;
         private GameObject OverlappingObject;
 
-        public TestPlayer(Vector2 position, SpriteBatch spriteBatch, Texture2D sprite, float speed, float drag)
-            : base(position, spriteBatch, sprite)
+        public TestPlayer(Vector2 position, Texture2D sprite, float speed, float drag)
+            : base(position, sprite)
         {
             _speed = speed;
             _drag = drag;
@@ -52,7 +52,10 @@ namespace SacreBleu.GameObjects
             Vector2 previousPosition = _position;
             _position += MovementDirection * _speed * (float)gameTime.ElapsedGameTime.TotalMilliseconds / 15;
 
-            OverlappingObject = LevelTest.instance.baseLevel.RectangleOverlapping(_bounds);
+            _position = LevelTest.instance.baseLevel.CalculateFreePosition(previousPosition, _position, _bounds);
+
+            /*
+            OverlappingObject = LevelTest.instance.baseLevel.RectangleOverlapping(GetBounds());
             if (OverlappingObject != null)
             {
                 if (OverlappingObject._tag.Equals("Obstacle"))
@@ -60,6 +63,7 @@ namespace SacreBleu.GameObjects
                 else if (OverlappingObject._tag.Equals("Hazard"))
                     Death();
             }
+            */
         }
 
         private void Death()
@@ -71,9 +75,9 @@ namespace SacreBleu.GameObjects
         {
             base.Draw();
 
-            if (OverlappingObject != null && OverlappingObject._tag.Equals("Obstacle"))
+            if (OverlappingObject != null)
             {
-                _spriteBatch.DrawString(LevelTest.instance._levelFont, "overlapping", new Vector2(_position.X, _position.Y + 10), Color.Black);
+                SacreBleuGame._instance._spriteBatch.DrawString(SacreBleuGame._instance._levelFont, "overlapping", new Vector2(_position.X, _position.Y + 10), Color.Black);
             }
         }
     }

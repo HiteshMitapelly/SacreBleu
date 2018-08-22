@@ -11,14 +11,20 @@ namespace SacreBleu.Levels
 {
     class BaseLevel
     {
+        public TestPlayer _player;
         public Obstacle[] _obstacles;
         public Hazard[] _hazards;
-        public GameObject _gameObjects;
 
-        public BaseLevel(Obstacle[] obstacles, Hazard[] hazards)
+        public BaseLevel(Vector2 playerStartingPosition, Obstacle[] obstacles, Hazard[] hazards)
         {
+            _player = new TestPlayer(playerStartingPosition, SacreBleuGame._instance.basicSquare, 1f, 0.1f);
             _obstacles = obstacles;
             _hazards = hazards;
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            _player.Update(gameTime);
         }
 
         public GameObject RectangleOverlapping(Rectangle boundsToCheck)
@@ -37,12 +43,54 @@ namespace SacreBleu.Levels
             return null;
         }
 
+        public Vector2 CalculateFreePosition(Vector2 originalPosition, Vector2 destination, Rectangle boundingBox)
+        {
+            Vector2 movementToTry = destination - originalPosition;
+            Vector2 furthestFreePosition = originalPosition;
+            int movementStepCount = (int)(movementToTry.Length() * 2) + 1;
+            Vector2 oneStep = movementToTry / movementStepCount;
+
+            for(int i = 0; i <= movementStepCount; i++)
+            {
+                Vector2 positionToTry = originalPosition + oneStep * i;
+                Rectangle testBoundary = CreateCollisionTestRectangle(positionToTry, boundingBox.Width, boundingBox.Height);
+                if (RectangleOverlapping(testBoundary) == null)
+                    furthestFreePosition = positionToTry;
+                else
+                {
+                    bool diagonalMove = movementToTry.X != 0 && movementToTry.Y != 0;
+                    if(diagonalMove)
+                    {
+                        int stepsLeft = movementStepCount - (i - 1);
+
+                        Vector2 remainingHorizontalMovement = oneStep.X * Vector2.UnitX * stepsLeft;
+                        Vector2 finalHorizontalPosition = furthestFreePosition + remainingHorizontalMovement;
+                        furthestFreePosition = CalculateFreePosition(furthestFreePosition, finalHorizontalPosition, boundingBox);
+
+                        Vector2 remainingVerticalMovement = oneStep.Y * Vector2.UnitY * stepsLeft;
+                        Vector2 finalVerticalPosition = furthestFreePosition + remainingVerticalMovement;
+                        furthestFreePosition = CalculateFreePosition(furthestFreePosition, finalVerticalPosition, boundingBox);
+                    }
+                    break;
+                }
+            }
+
+            return furthestFreePosition;
+        }
+
+        private Rectangle CreateCollisionTestRectangle(Vector2 positionToTry, int width, int height)
+        {
+            return new Rectangle((int)positionToTry.X, (int)positionToTry.Y, width, height);
+        }
+
         public void Draw()
         {
             foreach (Obstacle o in _obstacles)
                 o.Draw();
             foreach (Hazard h in _hazards)
                 h.Draw();
+
+            _player.Draw();
         }
     }
 }

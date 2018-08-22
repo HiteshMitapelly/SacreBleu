@@ -15,23 +15,25 @@ namespace SacreBleu.Levels
 
         public BaseLevel baseLevel;
 
+        public TestPlayer player;
+
         public List<Obstacle> _obstacles;
         public List<Hazard> _hazards;
 
-        public SpriteFont _levelFont;
+        
 
-        public LevelTest(SpriteBatch spriteBatch, Texture2D sprite, SpriteFont font)
+        public LevelTest(Texture2D sprite, SpriteFont font)
         {
             instance = this;
 
+
+
             _obstacles = new List<Obstacle>();
-            _obstacles.Add(new Obstacle(new Vector2(100, 100), spriteBatch, sprite));
+            _obstacles.Add(new Obstacle(new Vector2(100, 100), sprite));
 
             _hazards = new List<Hazard>();
 
-            baseLevel = new BaseLevel(_obstacles.ToArray(), _hazards.ToArray());
-
-            _levelFont = font;
+            baseLevel = new BaseLevel(new Vector2(250, 250), _obstacles.ToArray(), _hazards.ToArray());
         }
 
         public void Draw()

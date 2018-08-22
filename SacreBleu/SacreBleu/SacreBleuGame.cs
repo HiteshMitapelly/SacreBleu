@@ -9,23 +9,27 @@ namespace SacreBleu
 	public enum Gamestates { PAUSED, READY, RELEASED}
     public class SacreBleuGame : Game
     {
-        GraphicsDeviceManager _graphics;
-        SpriteBatch _spriteBatch;
+        public static SacreBleuGame _instance;
+
+        public GraphicsDeviceManager _graphics;
+        public SpriteBatch _spriteBatch;
 
 		Texture2D frogTexture;
 		Frog frogObject;
 		Vector2 frogPosition;
 
         //testing level design
-        Texture2D basicSquare;
-
+        public Texture2D basicSquare;
+        public SpriteFont _levelFont;
         LevelTest levelTest;
-        TestPlayer player;
 
         public static Gamestates currentState;
 			
 		public SacreBleuGame()
         {
+            if(_instance == null)
+                _instance = this;
+
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
@@ -52,8 +56,8 @@ namespace SacreBleu
 
 
             basicSquare = Content.Load<Texture2D>("Sprites/BasicSquare");
-            player = new TestPlayer(new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2), _spriteBatch, basicSquare, 1f, 0.1f);
-            levelTest = new LevelTest(_spriteBatch, basicSquare, Content.Load<SpriteFont>("Fonts/Bebas"));
+            _levelFont = Content.Load<SpriteFont>("Fonts/Bebas");
+            levelTest = new LevelTest(basicSquare, _levelFont);
         }
 
         protected override void UnloadContent()
@@ -69,7 +73,7 @@ namespace SacreBleu
 			// TODO: Add your update logic here
 			frogObject.Update(gameTime);
 
-            player.Update(gameTime);
+            levelTest.baseLevel.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -82,7 +86,6 @@ namespace SacreBleu
 			frogObject.draw(_spriteBatch);
 
             levelTest.Draw();
-            player.Draw();
             _spriteBatch.End();
 
             base.Draw(gameTime);
