@@ -42,6 +42,8 @@ namespace SacreBleu.GameObjects
             return new Rectangle((int)_position.X, (int)_position.Y, _sprite.Width, _sprite.Height);
         }
 
+        public virtual void RegisterTriggerCollision(GameObject collisionObject) { }
+
         public virtual void Draw()
         {
             SacreBleuGame._instance._spriteBatch.Draw(_sprite, _position, null, Color.White, _rotation, new Vector2(_sprite.Width / 2, _sprite.Height / 2), _scale, SpriteEffects.None, 0f);

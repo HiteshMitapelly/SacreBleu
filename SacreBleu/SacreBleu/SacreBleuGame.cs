@@ -51,7 +51,7 @@ namespace SacreBleu
 			frogPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2);
 			currentState = Gamestates.READY;
 			frogTexture = Content.Load<Texture2D>("ball");
-			frogObject = new Frog(frogPosition,_spriteBatch,frogTexture);
+			frogObject = new Frog(frogPosition, frogTexture);
 			frogObject.Start();
 
 

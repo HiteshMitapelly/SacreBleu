@@ -11,74 +11,33 @@ using SacreBleu.Levels;
 
 namespace SacreBleu.GameObjects
 {
-    class TestPlayer : GameObject
+    class TestPlayer : MoveableGameObject
     {
-        public float _speed;
-        public float _drag;
-        private Vector2 MovementDirection;
-        private GameObject OverlappingObject;
-
         public TestPlayer(Vector2 position, Texture2D sprite, float speed, float drag)
-            : base(position, sprite)
+            : base(position, sprite, speed, drag)
         {
-            _speed = speed;
-            _drag = drag;
-
             _tag = "Player";
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             PollInput();
 
-            //simulate drag
-            MovementDirection -= MovementDirection * _drag;
-
-            //move player
-            Move(gameTime);
+            base.Update(gameTime);
         }
 
         private void PollInput()
         {
             KeyboardState input = Keyboard.GetState();
-            if (input.IsKeyDown(Keys.Left)) { MovementDirection += new Vector2(-1, 0); }
-            if (input.IsKeyDown(Keys.Right)) { MovementDirection += new Vector2(1, 0); }
-            if (input.IsKeyDown(Keys.Up)) { MovementDirection += new Vector2(0, -1); }
-            if(input.IsKeyDown(Keys.Down)) { MovementDirection += new Vector2(0, 1); }
-        }
-
-        private void Move(GameTime gameTime)
-        {
-            Vector2 previousPosition = _position;
-            _position += MovementDirection * _speed * (float)gameTime.ElapsedGameTime.TotalMilliseconds / 15;
-
-            _position = LevelTest.instance.baseLevel.CalculateFreePosition(previousPosition, _position, _bounds);
-
-            /*
-            OverlappingObject = LevelTest.instance.baseLevel.RectangleOverlapping(GetBounds());
-            if (OverlappingObject != null)
-            {
-                if (OverlappingObject._tag.Equals("Obstacle"))
-                    _position = previousPosition;
-                else if (OverlappingObject._tag.Equals("Hazard"))
-                    Death();
-            }
-            */
+            if (input.IsKeyDown(Keys.Left)) { _velocity += new Vector2(-1, 0); }
+            if (input.IsKeyDown(Keys.Right)) { _velocity += new Vector2(1, 0); }
+            if (input.IsKeyDown(Keys.Up)) { _velocity += new Vector2(0, -1); }
+            if (input.IsKeyDown(Keys.Down)) { _velocity += new Vector2(0, 1); }
         }
 
         private void Death()
         {
             //kill the player
-        }
-
-        public override void Draw()
-        {
-            base.Draw();
-
-            if (OverlappingObject != null)
-            {
-                SacreBleuGame._instance._spriteBatch.DrawString(SacreBleuGame._instance._levelFont, "overlapping", new Vector2(_position.X, _position.Y + 10), Color.Black);
-            }
         }
     }
 }

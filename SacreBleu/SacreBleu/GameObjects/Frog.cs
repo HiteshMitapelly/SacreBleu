@@ -7,6 +7,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
 namespace SacreBleu.GameObjects
 {
 	class Frog : GameObject
@@ -21,60 +22,35 @@ namespace SacreBleu.GameObjects
 		Rectangle r;
 		Vector2 v;
 		float angle;
-		//Vector2 position;
-		//Texture2D frogSprite;
 
-		/// <summary>
-		/// Constructor for frog class
-		/// </summary>
-		/// <param name="sprite"></param>
-		/// <param name="position"></param>
-		public Frog(Vector2 position, SpriteBatch spriteBatch, Texture2D sprite) : base(position, spriteBatch, sprite)
+		public Frog(Vector2 position, Texture2D sprite) : base(position, sprite)
 		{
 			_tag = "frog";
 
 			Start();
 		}
 
-
-		/// <summary>
-		/// Initializing values for frog class.
-		/// This is called from LoadContent of Game1.cs
-		/// </summary>
-		public void Start()
+        public void Start()
 		{
 			initPosition = _position;
 			dragging = false;
 			released = false;
-
 		}
 
-
-
-
-		public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
 		{
+            MouseState mouseState = Mouse.GetState();
 
+            bool inRange = _bounds.Contains(new Point((int)mouseState.X, (int)mouseState.Y));
 
-
-			MouseState mouseState = Mouse.GetState();
-
-
-			bool inRange = _bounds.Contains(new Point((int)mouseState.X, (int)mouseState.Y));
-
-
-			if (SacreBleuGame.currentState == Gamestates.READY)  // This is to drag frog
+            if (SacreBleuGame.currentState == Gamestates.READY)  // This is to drag frog
 			{
-
 				if ((mouseState.LeftButton == ButtonState.Pressed) && inRange)
 				{
-
 					dragging = true;
 					Vector2 end = new Vector2(mouseState.X, mouseState.Y);
 					dragLine(initPosition, end, Color.Black, 1);
-
 				}
-
 
 				if ((mouseState.LeftButton == ButtonState.Released) && dragging)
 				{
@@ -98,12 +74,8 @@ namespace SacreBleu.GameObjects
 					released = false;
 				if (released)
 					releaseFrog(gameTime);
-
 			}
-
 		}
-
-
 
 		void dragLine(Vector2 begin, Vector2 end, Color color, int width = 1)
 		{
@@ -113,12 +85,7 @@ namespace SacreBleu.GameObjects
 			if (begin.Y > end.Y)
 			{
 				angle = MathHelper.TwoPi - angle;
-
 			}
-			_spriteBatch.Begin();
-			_spriteBatch.Draw(_sprite, r, null, Color.White, angle, Vector2.Zero, SpriteEffects.None, 0);
-			_spriteBatch.End();
-
 		}
 
 		void releaseFrog(GameTime gameTime)
@@ -127,20 +94,12 @@ namespace SacreBleu.GameObjects
 			_position.Y -= frogVelocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
 			Xoffset -= 2;
 			Yoffset -= 4;
-
 		}
-
 
 		public void draw(SpriteBatch spritebatch)
 		{
 			base.Draw();
-
-
-			//spritebatch.Draw(frogSprite, _position, Color.White);
-
-		}
-
-
+            SacreBleuGame._instance._spriteBatch.Draw(_sprite, r, null, Color.White, angle, Vector2.Zero, SpriteEffects.None, 0);
+        }
 	}
-
 }
