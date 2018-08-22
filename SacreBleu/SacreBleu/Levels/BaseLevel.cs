@@ -13,6 +13,7 @@ namespace SacreBleu.Levels
     {
         public Obstacle[] _obstacles;
         public Hazard[] _hazards;
+        public GameObject _gameObjects;
 
         public BaseLevel(Obstacle[] obstacles, Hazard[] hazards)
         {

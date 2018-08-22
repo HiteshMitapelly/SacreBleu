@@ -16,6 +16,7 @@ namespace SacreBleu.GameObjects
         public float _speed;
         public float _drag;
         private Vector2 MovementDirection;
+        private GameObject OverlappingObject;
 
         public TestPlayer(Vector2 position, SpriteBatch spriteBatch, Texture2D sprite, float speed, float drag)
             : base(position, spriteBatch, sprite)
@@ -51,12 +52,12 @@ namespace SacreBleu.GameObjects
             Vector2 previousPosition = _position;
             _position += MovementDirection * _speed * (float)gameTime.ElapsedGameTime.TotalMilliseconds / 15;
 
-            GameObject overlapping = LevelTest.instance.baseLevel.RectangleOverlapping(_bounds);
-            if (overlapping != null)
+            OverlappingObject = LevelTest.instance.baseLevel.RectangleOverlapping(_bounds);
+            if (OverlappingObject != null)
             {
-                if (overlapping._tag.Equals("Obstacle"))
+                if (OverlappingObject._tag.Equals("Obstacle"))
                     _position = previousPosition;
-                else if (overlapping._tag.Equals("Hazard"))
+                else if (OverlappingObject._tag.Equals("Hazard"))
                     Death();
             }
         }
@@ -64,6 +65,16 @@ namespace SacreBleu.GameObjects
         private void Death()
         {
             //kill the player
+        }
+
+        public override void Draw()
+        {
+            base.Draw();
+
+            if (OverlappingObject != null && OverlappingObject._tag.Equals("Obstacle"))
+            {
+                _spriteBatch.DrawString(LevelTest.instance._levelFont, "overlapping", new Vector2(_position.X, _position.Y + 10), Color.Black);
+            }
         }
     }
 }
