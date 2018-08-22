@@ -1,27 +1,28 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SacreBleu.GameObjects;
-using SacreBleu.Levels;
 
 namespace SacreBleu
 {
-    /// <summary>
-    /// This is the main type for your game.
-    /// </summary>
+	/// <summary>
+	/// This is the main type for your game.
+	/// </summary>
+	public enum Gamestates { PAUSED, READY, RELEASED}
     public class Game1 : Game
     {
-        GraphicsDeviceManager _graphics;
-        SpriteBatch _spriteBatch;
+        GraphicsDeviceManager graphics;
+        SpriteBatch spriteBatch;
+		Texture2D frogTexture;
+		Frog frogObject;
+		Vector2 frogPosition;
 
-        Texture2D basicSquare;
 
-        LevelTest levelTest;
-        TestPlayer player;
+		public static Gamestates currentState;
         
-        public Game1()
+			
+		public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
 
@@ -33,9 +34,10 @@ namespace SacreBleu
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
-            base.Initialize();
+			// TODO: Add your initialization logic here
+			this.IsMouseVisible = true;
+			
+			base.Initialize();
         }
 
         /// <summary>
@@ -45,13 +47,15 @@ namespace SacreBleu
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
-            basicSquare = Content.Load<Texture2D>("Sprites/BasicSquare");
-            player = new TestPlayer(new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2), _spriteBatch, basicSquare, 1f, 0.1f);
-            levelTest = new LevelTest(_spriteBatch, basicSquare, Content.Load<SpriteFont>("Fonts/Bebas"));
-        }
+			// TODO: use this.Content to load your game content here
+			frogPosition = new Vector2(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2);
+			currentState = Gamestates.READY;
+			frogTexture = Content.Load<Texture2D>("ball");
+			frogObject = new Frog(frogTexture, frogPosition);
+			frogObject.Start();
+		}
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -72,9 +76,9 @@ namespace SacreBleu
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
-            player.Update(gameTime);
+			// TODO: Add your update logic here
 
+			frogObject.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -86,11 +90,10 @@ namespace SacreBleu
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
-            _spriteBatch.Begin();
-            levelTest.Draw();
-            player.Draw();
-            _spriteBatch.End();
+			// TODO: Add your drawing code here
+			spriteBatch.Begin();
+			frogObject.draw(spriteBatch);
+			spriteBatch.End();
 
             base.Draw(gameTime);
         }
