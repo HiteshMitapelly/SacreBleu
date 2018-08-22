@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SacreBleu.GameObjects;
+using SacreBleu.Levels;
 
 namespace SacreBleu
 {
@@ -9,12 +11,17 @@ namespace SacreBleu
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        GraphicsDeviceManager _graphics;
+        SpriteBatch _spriteBatch;
+
+        Texture2D basicSquare;
+
+        LevelTest levelTest;
+        TestPlayer player;
         
         public Game1()
         {
-            graphics = new GraphicsDeviceManager(this);
+            _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
 
@@ -38,9 +45,12 @@ namespace SacreBleu
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            basicSquare = Content.Load<Texture2D>("Sprites/BasicSquare");
+            player = new TestPlayer(new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2), _spriteBatch, basicSquare, 1f, 0.1f);
+            levelTest = new LevelTest(_spriteBatch, basicSquare, Content.Load<SpriteFont>("Fonts/Bebas"));
         }
 
         /// <summary>
@@ -63,6 +73,7 @@ namespace SacreBleu
                 Exit();
 
             // TODO: Add your update logic here
+            player.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -76,6 +87,10 @@ namespace SacreBleu
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            _spriteBatch.Begin();
+            levelTest.Draw();
+            player.Draw();
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }
