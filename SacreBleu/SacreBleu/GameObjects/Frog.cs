@@ -47,15 +47,15 @@ namespace SacreBleu.GameObjects
 		{
 			MouseState mouseState = Mouse.GetState();
 			bool inRange = _bounds.Contains(new Point((int)mouseState.X, (int)mouseState.Y));
+
 			
-				
-		
-			if (inRange) { 
-				if ((oldMouseState.LeftButton == ButtonState.Released) && (mouseState.LeftButton == ButtonState.Pressed)) //started to drag condition
+
+				if (inRange) { 
+				if ((oldMouseState.LeftButton == ButtonState.Released) && (mouseState.LeftButton == ButtonState.Pressed)) //player started to drag condition
 				{
-				
-						
-						dragging = true;
+					
+
+					dragging = true;
 						initPosition = new Vector2(mouseState.X, mouseState.Y);
 
 					
@@ -82,7 +82,7 @@ namespace SacreBleu.GameObjects
 
 			
 
-			/* old code (pls dont delete might need for future reference)
+			/* old code (pls dont delete this. I(Hitesh) might need for future reference)
 
 				if (SacreBleuGame._instance.currentState == Gamestates.READY)  // This is to drag frog
 			{
