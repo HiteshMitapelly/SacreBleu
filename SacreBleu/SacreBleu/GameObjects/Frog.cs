@@ -10,75 +10,74 @@ using Microsoft.Xna.Framework.Input;
 
 namespace SacreBleu.GameObjects
 {
-	class Frog : GameObject
+	class Frog : MoveableGameObject
 	{
-		
-		Vector2 frogVelocity;
-		Vector2 initPosition, finalPosition;
-		
-		bool dragging;
+        MouseState mouseState;
+        Vector2 _mouseInitPosition, _mouseFinalPosition;
+        Vector2 worldPosition;
+
+
+        bool dragging;
 		MouseState oldMouseState;
-		Rectangle r;
-		Vector2 v;
+		Rectangle _line;
+		Vector2 _lineVector;
 		float angle;
 
-		//float Xoffset, Yoffset,counter;
-		//bool released;
-		//Rectangle bbox;
-		//Vector2 frogPosition;
+        //float Xoffset, Yoffset,counter;
+        //bool released;
+        //Rectangle bbox;
+        //Vector2 frogPosition;
+
+        bool inRange;
 
 
-		public Frog(Vector2 position, Texture2D sprite) : base(position, sprite)
+		public Frog(Vector2 position, Texture2D sprite, float drag) : base(position, sprite, drag)
 		{
-			_tag = "frog";
+			_tag = "Frog";
 
-			Start();
-		}
+            _mouseInitPosition = _position;
+            dragging = false;
+        }
 
-        public void Start()
+        public override void Update(GameTime gameTime)
 		{
-			initPosition = _position;
-			dragging = false;
-			//released = false;
-			
-		}
+            Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
 
-        public void Update(GameTime gameTime)
-		{
-			MouseState mouseState = Mouse.GetState();
-			bool inRange = _bounds.Contains(new Point((int)mouseState.X, (int)mouseState.Y));
+            worldPosition = Vector2.Transform(mousePosition, Matrix.Invert(Camera._instance.Transform));
 
-			
+            mouseState = Mouse.GetState();
+			inRange = GetBounds().Contains(new Point((int)worldPosition.X + (_sprite.Width / 2), (int)worldPosition.Y + (_sprite.Height / 2)));
 
-				if (inRange) { 
+			if (inRange)
+            { 
 				if ((oldMouseState.LeftButton == ButtonState.Released) && (mouseState.LeftButton == ButtonState.Pressed)) //player started to drag condition
 				{
-					
-
 					dragging = true;
-						initPosition = new Vector2(mouseState.X, mouseState.Y);
-
-					
+				    _mouseInitPosition = new Vector2(_position.X, _position.Y);	
 				}
 			}
 
 			if (((mouseState.LeftButton == ButtonState.Pressed) && (oldMouseState.LeftButton == ButtonState.Pressed)) && dragging) // in dragging state condition
 			{
-				Vector2 end = new Vector2(mouseState.X, mouseState.Y);
-				dragLine(initPosition, end, Color.White, 1);
+				Vector2 end = new Vector2(worldPosition.X, worldPosition.Y);
+				DragLine(_mouseInitPosition, end, Color.White, 1);
 			}
 
 			if (((mouseState.LeftButton == ButtonState.Released)&&(oldMouseState.LeftButton == ButtonState.Pressed))&& dragging)  // dragged and released condition
 			{
-				
+                Vector2 velocity = Vector2.Zero;
+
 				dragging = false;
-				finalPosition = new Vector2(mouseState.X, mouseState.Y);
-				frogVelocity = new Vector2(finalPosition.X - initPosition.X, finalPosition.Y - initPosition.Y);
-				releaseFrog(gameTime);
+				_mouseFinalPosition = new Vector2(worldPosition.X, worldPosition.Y);
+                velocity = new Vector2(_mouseFinalPosition.X - _mouseInitPosition.X, _mouseFinalPosition.Y - _mouseInitPosition.Y);
+                //releaseFrog(gameTime);
+                SetVelocity(velocity);
 				SacreBleuGame._instance.currentState = Gamestates.RELEASED;
 			}
 
-			
+            oldMouseState = mouseState;
+
+            base.Update(gameTime);
 
 			
 
@@ -129,20 +128,21 @@ namespace SacreBleu.GameObjects
 					releaseFrog(gameTime);
 			}*/
 
-			oldMouseState = mouseState;
+			
 		}
 
-		void dragLine(Vector2 begin, Vector2 end, Color color, int width = 1)
+		void DragLine(Vector2 begin, Vector2 currentPosition, Color color, int width = 1)
 		{
-			r = new Rectangle((int)begin.X, (int)begin.Y, (int)(end - begin).Length() + width, width);
-			v = Vector2.Normalize(begin - end);
-			angle = (float)Math.Acos(Vector2.Dot(v, -Vector2.UnitX));
-			if (begin.Y > end.Y)
+			_line = new Rectangle((int)begin.X, (int)begin.Y, (int)(currentPosition - begin).Length() + width, width);
+			_lineVector = Vector2.Normalize(begin - currentPosition);
+			angle = (float)Math.Acos(Vector2.Dot(_lineVector, -Vector2.UnitX));
+			if (begin.Y > currentPosition.Y)
 			{
 				angle = MathHelper.TwoPi - angle;
 			}
 		}
 
+        /*
 		void releaseFrog(GameTime gameTime)
 		{
 			float timer = Math.Abs( frogVelocity.Y * 10f);
@@ -158,13 +158,21 @@ namespace SacreBleu.GameObjects
 			_position.X -= frogVelocity.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
 			_position.Y -= frogVelocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
 			//Xoffset -= 2;
-			counter -= 4;*/
+			counter -= 4;
 		}
+        */
 
-		public void draw(SpriteBatch spritebatch)
+		public override void Draw()
 		{
 			base.Draw();
-            SacreBleuGame._instance._spriteBatch.Draw(_sprite, r, null, Color.White, angle, Vector2.Zero, SpriteEffects.None, 0);
+            SacreBleuGame._instance._spriteBatch.Draw(_sprite, _line, null, Color.White, angle, Vector2.Zero, SpriteEffects.None, 0);
+
+            SacreBleuGame._instance._spriteBatch.DrawString(SacreBleuGame._instance._levelFont, mouseState.X + " : " + mouseState.Y, new Vector2(worldPosition.X, worldPosition.Y), Color.Black);
+
+            if (inRange)
+            {
+                SacreBleuGame._instance._spriteBatch.DrawString(SacreBleuGame._instance._levelFont, "In Range", new Vector2(_position.X, _position.Y + 25), Color.Black);
+            }
         }
 	}
 }

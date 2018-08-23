@@ -11,20 +11,25 @@ namespace SacreBleu.Levels
 {
     class BaseLevel
     {
-        public TestPlayer _player;
+        Camera camera;
+
+        public Frog _frog;
         public Obstacle[] _obstacles;
         public Hazard[] _hazards;
 
-        public BaseLevel(Vector2 playerStartingPosition, Obstacle[] obstacles, Hazard[] hazards)
+        public BaseLevel(Vector2 frogStartingPosition, Obstacle[] obstacles, Hazard[] hazards)
         {
-            _player = new TestPlayer(playerStartingPosition, SacreBleuGame._instance.basicSquare, 0.5f, 0.1f);
+            camera = new Camera();
+
+            _frog = new Frog(frogStartingPosition, SacreBleuGame._instance.frogTexture, 0.1f);
             _obstacles = obstacles;
             _hazards = hazards;
         }
 
         public void Update(GameTime gameTime)
         {
-            _player.Update(gameTime);
+            _frog.Update(gameTime);
+            camera.Follow(_frog);
         }
 
         public GameObject RectangleOverlapping(Rectangle boundsToCheck)
@@ -88,12 +93,16 @@ namespace SacreBleu.Levels
 
         public void Draw()
         {
+            SacreBleuGame._instance._spriteBatch.Begin(transformMatrix: camera.Transform);
+
             foreach (Obstacle o in _obstacles)
                 o.Draw();
             foreach (Hazard h in _hazards)
                 h.Draw();
 
-            _player.Draw();
+            _frog.Draw();
+
+            SacreBleuGame._instance._spriteBatch.End();
         }
     }
 }

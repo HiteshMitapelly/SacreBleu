@@ -15,10 +15,8 @@ namespace SacreBleu
         public GraphicsDeviceManager _graphics;
         public SpriteBatch _spriteBatch;
 
-		Texture2D frogTexture;
-		Frog frogObject;
-		Vector2 frogPosition;
-		Camera camera;
+        //texture references
+        public Texture2D frogTexture;
 
         //testing level design
         public Texture2D basicSquare;
@@ -42,7 +40,7 @@ namespace SacreBleu
 			this.IsMouseVisible = true;
 			_screenHeight = _graphics.PreferredBackBufferHeight;
 			_screenWidth = _graphics.PreferredBackBufferWidth;
-			camera = new Camera();
+
             base.Initialize();
         }
 
@@ -52,15 +50,16 @@ namespace SacreBleu
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			// TODO: use this.Content to load your game content here
-			frogPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2);
 			currentState = Gamestates.READY;
+            
+            //load textures
 			frogTexture = Content.Load<Texture2D>("ball");
-			frogObject = new Frog(frogPosition, frogTexture);
-			frogObject.Start();
-
-
             basicSquare = Content.Load<Texture2D>("Sprites/BasicSquare");
+
+            //load fonts
             _levelFont = Content.Load<SpriteFont>("Fonts/Bebas");
+
+            //create level
             levelTest = new LevelTest(basicSquare, _levelFont);
         }
 
@@ -75,9 +74,6 @@ namespace SacreBleu
                 Exit();
 
 			// TODO: Add your update logic here
-			frogObject.Update(gameTime);
-			camera.Follow(frogObject);
-
             levelTest.baseLevel.Update(gameTime);
             base.Update(gameTime);
         }
@@ -86,13 +82,8 @@ namespace SacreBleu
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-			// TODO: Add your drawing code here
-			//_spriteBatch.Begin();
-			_spriteBatch.Begin(transformMatrix: camera.Transform);
-			frogObject.draw(_spriteBatch);
-
+            // TODO: Add your drawing code here
             levelTest.Draw();
-            _spriteBatch.End();
 
             base.Draw(gameTime);
         }

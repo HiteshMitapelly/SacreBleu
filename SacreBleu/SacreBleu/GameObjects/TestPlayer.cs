@@ -14,7 +14,7 @@ namespace SacreBleu.GameObjects
     class TestPlayer : MoveableGameObject
     {
         public TestPlayer(Vector2 position, Texture2D sprite, float speed, float drag)
-            : base(position, sprite, speed, drag)
+            : base(position, sprite, drag)
         {
             _tag = "Player";
         }
