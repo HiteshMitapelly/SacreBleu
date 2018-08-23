@@ -14,9 +14,9 @@ namespace SacreBleu
 		public  int _screenWidth, _screenHeight;
         public GraphicsDeviceManager _graphics;
         public SpriteBatch _spriteBatch;
-
-        //texture references
-        public Texture2D frogTexture;
+		public Vector2 _worldPosition;
+		//texture references
+		public Texture2D frogTexture;
 
         //testing level design
         public Texture2D basicSquare;
@@ -74,6 +74,7 @@ namespace SacreBleu
                 Exit();
 
 			// TODO: Add your update logic here
+
             levelTest.baseLevel.Update(gameTime);
             base.Update(gameTime);
         }

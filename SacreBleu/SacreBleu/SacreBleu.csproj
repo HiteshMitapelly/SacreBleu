@@ -43,6 +43,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="GameObjects\Camera.cs" />
+    <Compile Include="GameObjects\Button.cs" />
+    <Compile Include="GameObjects\PowerBar.cs" />
     <Compile Include="GameObjects\Frog.cs" />
     <Compile Include="GameObjects\MoveableGameObject.cs" />
     <Compile Include="SacreBleuGame.cs" />
