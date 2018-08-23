@@ -74,7 +74,7 @@ namespace SacreBleu.GameObjects
 				_mouseFinalPosition = new Vector2(worldPosition.X, worldPosition.Y);
                 velocity = new Vector2(_mouseFinalPosition.X - _mouseInitPosition.X, _mouseFinalPosition.Y - _mouseInitPosition.Y);
                 //releaseFrog(gameTime);
-                SetVelocity(velocity);
+                SetVelocity(-velocity * 0.5f);
 				SacreBleuGame._instance.currentState = Gamestates.RELEASED;
 			}
 
@@ -145,30 +145,11 @@ namespace SacreBleu.GameObjects
 			}
 		}
 
-        /*
-		void releaseFrog(GameTime gameTime)
-		{
-			float timer = Math.Abs( frogVelocity.Y * 10f);
-			while (timer > 1)   // frog flight loop
-			{
-				_position -= frogVelocity * 10 * (float)gameTime.ElapsedGameTime.TotalSeconds;
-				timer /= 2f;
-			}
-			initPosition = _position;
-			SacreBleuGame._instance.currentState = Gamestates.READY;
-
-			/*Debug.WriteLine(counter);
-			_position.X -= frogVelocity.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
-			_position.Y -= frogVelocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
-			//Xoffset -= 2;
-			counter -= 4;
-		}
-        */
-
 		public override void Draw()
 		{
 			base.Draw();
-            SacreBleuGame._instance._spriteBatch.Draw(_sprite, _line, null, Color.White, angle, Vector2.Zero, SpriteEffects.None, 0);
+            if(dragging)
+                SacreBleuGame._instance._spriteBatch.Draw(_sprite, _line, null, Color.White, angle, Vector2.Zero, SpriteEffects.None, 0);
 
             SacreBleuGame._instance._spriteBatch.DrawString(SacreBleuGame._instance._levelFont, mouseState.X + " : " + mouseState.Y, new Vector2(worldPosition.X, worldPosition.Y), Color.Black);
 
