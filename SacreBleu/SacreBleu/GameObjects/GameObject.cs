@@ -48,7 +48,7 @@ namespace SacreBleu.GameObjects
         {
             SacreBleuGame._instance._spriteBatch.Draw(_sprite, _position, null, Color.White, _rotation, new Vector2(_sprite.Width / 2, _sprite.Height / 2), _scale, SpriteEffects.None, 0f);
 
-            SacreBleuGame._instance._spriteBatch.DrawString(SacreBleuGame._instance._levelFont, _tag, _position, Color.Black);
+            SacreBleuGame._instance._spriteBatch.DrawString(SacreBleuGame._instance._levelFont, _tag+" "+_position, _position, Color.Black);
         }
     }
 }

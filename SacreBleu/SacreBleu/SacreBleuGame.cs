@@ -11,19 +11,21 @@ namespace SacreBleu
     {
         public static SacreBleuGame _instance;
 
+		public  int _screenWidth, _screenHeight;
         public GraphicsDeviceManager _graphics;
         public SpriteBatch _spriteBatch;
 
 		Texture2D frogTexture;
 		Frog frogObject;
 		Vector2 frogPosition;
+		Camera camera;
 
         //testing level design
         public Texture2D basicSquare;
         public SpriteFont _levelFont;
         LevelTest levelTest;
 
-        public static Gamestates currentState;
+        public Gamestates currentState;
 			
 		public SacreBleuGame()
         {
@@ -38,7 +40,9 @@ namespace SacreBleu
         {
 			// TODO: Add your initialization logic here
 			this.IsMouseVisible = true;
-
+			_screenHeight = _graphics.PreferredBackBufferHeight;
+			_screenWidth = _graphics.PreferredBackBufferWidth;
+			camera = new Camera();
             base.Initialize();
         }
 
@@ -72,6 +76,7 @@ namespace SacreBleu
 
 			// TODO: Add your update logic here
 			frogObject.Update(gameTime);
+			camera.Follow(frogObject);
 
             levelTest.baseLevel.Update(gameTime);
             base.Update(gameTime);
@@ -82,7 +87,8 @@ namespace SacreBleu
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
 			// TODO: Add your drawing code here
-			_spriteBatch.Begin();
+			//_spriteBatch.Begin();
+			_spriteBatch.Begin(transformMatrix: camera.Transform);
 			frogObject.draw(_spriteBatch);
 
             levelTest.Draw();
