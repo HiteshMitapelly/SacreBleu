@@ -7,25 +7,18 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SacreBleu.GameObjects;
 
-namespace SacreBleu.GameObjects
+namespace SacreBleu
 {
-	class Camera 
+	public class Camera 
 	{
-        public static Camera _instance;
-
 		public Matrix Transform { get; private set; }
-
-        public Camera()
-        {
-            _instance = this;
-        }
-
 		
 		public void Follow(GameObject target)  // target is frog
 		{
 			var position = Matrix.CreateTranslation(
-			  -target._position.X - (target._bounds.Width / 2),
+			  -SacreBleuGame._instance._screenWidth / 2,
 			  -target._position.Y - (target._bounds.Height / 2),
 			  0);
 

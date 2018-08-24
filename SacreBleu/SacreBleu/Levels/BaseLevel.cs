@@ -11,9 +11,6 @@ namespace SacreBleu.Levels
 {
     class BaseLevel
     {
-        //camera reference
-        Camera _camera;
-
 		//UI element references
         PowerBar powerBar;
         Button button;
@@ -24,24 +21,60 @@ namespace SacreBleu.Levels
         public Obstacle[] _obstacles;
         public Hazard[] _hazards;
 
-        public BaseLevel(Vector2 frogStartingPosition, Obstacle[] obstacles, Hazard[] hazards)
+        public BaseLevel(int[,] levelLayout)
         {
-            _camera = new Camera();
-
 			directionGauge = new DirectionGauge(new Vector2(100, 300), SacreBleuGame._instance.arrowTexture);
             powerBar = new PowerBar(new Vector2(400, 450), SacreBleuGame._instance.basicSquare, SacreBleuGame._instance.basicSquare);
             button = new Button(new Vector2(300, 400), SacreBleuGame._instance.basicSquare);
 
-            _frog = new Frog(frogStartingPosition, SacreBleuGame._instance.basicSquare, 0.1f, 0.1f);
-            _obstacles = obstacles;
-            _hazards = hazards;
+            GenerateLevel(levelLayout);
+        }
+
+        private void GenerateLevel(int[,] levelLayout)
+        {
+            //0 for background tile
+            //1 for obstacle
+            //2 for hazard
+            //9 for frog
+            List<Obstacle> tempObstacles = new List<Obstacle>();
+            List<Hazard> tempHazards = new List<Hazard>();
+
+            for(int x = 0; x < levelLayout.GetLength(1); x++)
+            {
+                for(int y = 0; y < levelLayout.GetLength(0); y++)
+                {
+                    //calculate tile position
+                    Vector2 tilePosition = new Vector2(x * SacreBleuGame._instance._tileWidth, y * SacreBleuGame._instance._tileWidth);
+
+                    //get the specified map component
+                    int number = levelLayout[y, x];
+
+                    if(number == 0)
+                    {
+                    }
+                    else if(number == 1)
+                    {
+                        tempObstacles.Add(new Obstacle(tilePosition, SacreBleuGame._instance.basicSquare));
+                    }
+                    else if(number == 2)
+                    {
+                        tempHazards.Add(new Hazard(tilePosition, SacreBleuGame._instance.basicSquare));
+                    }
+                    else if(number == 9)
+                    {
+                        _frog = new Frog(tilePosition, SacreBleuGame._instance.basicSquare, 0.025f, 0.75f);
+                    }
+                }
+            }
+
+            _obstacles = tempObstacles.ToArray();
+            _hazards = tempHazards.ToArray();
         }
 
         //update game objects and camera
         public void Update(GameTime gameTime)
         {
             _frog.Update(gameTime);
-            _camera.Follow(_frog);
 
             powerBar.Update(gameTime);
             button.Update(gameTime);
@@ -156,8 +189,6 @@ namespace SacreBleu.Levels
         //draw all game objects
         public void Draw()
         {
-            SacreBleuGame._instance._spriteBatch.Begin(transformMatrix: _camera.Transform);
-
             foreach (Obstacle o in _obstacles)
                 o.Draw();
             foreach (Hazard h in _hazards)
@@ -167,8 +198,6 @@ namespace SacreBleu.Levels
             button.Draw();
             powerBar.Draw();
 			directionGauge.Draw();
-
-            SacreBleuGame._instance._spriteBatch.End();
         }
     }
 }

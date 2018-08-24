@@ -24,11 +24,11 @@ namespace SacreBleu.GameObjects
 		public void Update(GameTime gameTime) {
 			Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
 
-			worldPosition = Vector2.Transform(mousePosition, Matrix.Invert(Camera._instance.Transform));
+			worldPosition = Vector2.Transform(mousePosition, Matrix.Invert(SacreBleuGame._instance._camera.Transform));
 
 			mouseState = Mouse.GetState();
 			
-			inRange = GetBounds().Contains(new Point((int)worldPosition.X + (_sprite.Width / 2), (int)worldPosition.Y + (_sprite.Height / 2)));
+			inRange = GetBounds().Contains(new Point((int)worldPosition.X, (int)worldPosition.Y));
 
 			if (inRange) {
 				

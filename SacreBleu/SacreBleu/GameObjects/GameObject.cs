@@ -9,7 +9,7 @@ using SacreBleu.Levels;
 
 namespace SacreBleu.GameObjects
 {
-    class GameObject
+    public class GameObject
     {
         //id properties
         public string _tag;
@@ -20,6 +20,7 @@ namespace SacreBleu.GameObjects
 
         //graphics properties
         public Texture2D _sprite;
+        public Color _tint;
         public float _scale;
 
         //collision properties
@@ -32,6 +33,7 @@ namespace SacreBleu.GameObjects
             _position = position;
             _rotation = 0f;
             _sprite = sprite;
+            _tint = Color.White;
             _scale = 1f;
             _bounds = new Rectangle((int)_position.X, (int)_position.Y, _sprite.Width, _sprite.Height);
             _isTrigger = false;
@@ -46,7 +48,7 @@ namespace SacreBleu.GameObjects
 
         public virtual void Draw()
         {
-            SacreBleuGame._instance._spriteBatch.Draw(_sprite, _position, null, Color.White, _rotation, new Vector2(_sprite.Width / 2, _sprite.Height / 2), _scale, SpriteEffects.None, 0f);
+            SacreBleuGame._instance._spriteBatch.Draw(_sprite, _position, null, _tint, _rotation, Vector2.Zero, _scale, SpriteEffects.None, 0f);
 
             SacreBleuGame._instance._spriteBatch.DrawString(SacreBleuGame._instance._levelFont, _tag+" "+_position, _position, Color.Black);
         }

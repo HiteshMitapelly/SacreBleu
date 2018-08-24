@@ -15,6 +15,7 @@ namespace SacreBleu.GameObjects
         {
             _tag = "Hazard";
             _isTrigger = true;
+            _tint = Color.Red;
         }
 
         public override void Draw()

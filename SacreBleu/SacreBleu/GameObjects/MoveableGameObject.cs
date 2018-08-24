@@ -43,6 +43,9 @@ namespace SacreBleu.GameObjects
         public void AddVelocity()
         {
             _position += _velocity * (float)_gameTime.ElapsedGameTime.TotalMilliseconds / 15;
+
+            if (_velocity.Length() < 0.1f)
+                _velocity = Vector2.Zero;
         }
 
         public void SetVelocity(Vector2 velocity)

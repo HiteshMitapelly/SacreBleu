@@ -80,7 +80,7 @@ namespace SacreBleu.GameObjects
 			
 			
 			base.Draw();
-			Vector2 adjustedRectanglePos = new Vector2(_position.X - ((_sprite.Width) / 2), _position.Y - ((_sprite.Height) / 2));
+			Vector2 adjustedRectanglePos = new Vector2(_position.X, _position.Y);
 			SacreBleuGame._instance._spriteBatch.Draw(powerBarTexture, adjustedRectanglePos, new Rectangle((int)_position.X, (int)_position.Y, _sprite.Width, (int) powerBarHeight), Color.Black);
 		}
 

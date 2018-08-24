@@ -31,6 +31,7 @@ namespace SacreBleu.GameObjects
 		{
 			_tag = "Frog";
 			_instance = this;
+            _tint = Color.Green;
 
             _mouseInitPosition = _position;
             dragging = false;
@@ -40,10 +41,10 @@ namespace SacreBleu.GameObjects
 		{
             Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
 
-            worldPosition = Vector2.Transform(mousePosition, Matrix.Invert(Camera._instance.Transform));
+            worldPosition = Vector2.Transform(mousePosition, Matrix.Invert(SacreBleuGame._instance._camera.Transform));
 
             mouseState = Mouse.GetState();
-			inRange = GetBounds().Contains(new Point((int)worldPosition.X + (_sprite.Width / 2), (int)worldPosition.Y + (_sprite.Height / 2)));
+			inRange = GetBounds().Contains(new Point((int)worldPosition.X, (int)worldPosition.Y));
 
 			if (inRange)
             { 
@@ -68,7 +69,7 @@ namespace SacreBleu.GameObjects
 				_mouseFinalPosition = new Vector2(worldPosition.X, worldPosition.Y);
                 velocity = new Vector2(_mouseFinalPosition.X - _mouseInitPosition.X, _mouseFinalPosition.Y - _mouseInitPosition.Y);
                 //releaseFrog(gameTime);
-                SetVelocity(-velocity * 0.5f);
+                SetVelocity(-velocity * 0.25f);
 				SacreBleuGame._instance.currentState = Gamestates.RELEASED;
 			}
 
@@ -130,7 +131,7 @@ namespace SacreBleu.GameObjects
 
 		void DragLine(Vector2 begin, Vector2 currentPosition, Color color, int width = 1)
 		{
-			_line = new Rectangle((int)begin.X, (int)begin.Y, (int)(currentPosition - begin).Length() + width, width);
+			_line = new Rectangle((int)begin.X + _sprite.Width / 2, (int)begin.Y + _sprite.Height / 2, (int)(currentPosition - begin).Length() + width, width);
 			_lineVector = Vector2.Normalize(begin - currentPosition);
 			angle = (float)Math.Acos(Vector2.Dot(_lineVector, -Vector2.UnitX));
 			if (begin.Y > currentPosition.Y)
