@@ -14,6 +14,9 @@ namespace SacreBleu.Levels
         //camera reference
         Camera _camera;
 
+        PowerBar powerBar;
+        Button button;
+
         //references to all the game objects in any given level
         public Frog _frog;
         public Obstacle[] _obstacles;
@@ -22,6 +25,9 @@ namespace SacreBleu.Levels
         public BaseLevel(Vector2 frogStartingPosition, Obstacle[] obstacles, Hazard[] hazards)
         {
             _camera = new Camera();
+
+            powerBar = new PowerBar(new Vector2(400, 450), SacreBleuGame._instance.basicSquare, SacreBleuGame._instance.basicSquare);
+            button = new Button(new Vector2(300, 400), SacreBleuGame._instance.basicSquare);
 
             _frog = new Frog(frogStartingPosition, SacreBleuGame._instance.basicSquare, 0.1f, 0.1f);
             _obstacles = obstacles;
@@ -33,6 +39,9 @@ namespace SacreBleu.Levels
         {
             _frog.Update(gameTime);
             _camera.Follow(_frog);
+
+            powerBar.Update(gameTime);
+            button.Update(gameTime);
         }
 
         //check for overlapping rectangles
@@ -52,7 +61,7 @@ namespace SacreBleu.Levels
             return null;
         }
 
-        public void WhereCanIGetTo(MoveableGameObject objectToCheck, Vector2 originalPosition, Vector2 destination, Rectangle boundingRectangle)
+        public void CollisionCheck(MoveableGameObject objectToCheck, Vector2 originalPosition, Vector2 destination, Rectangle boundingRectangle)
         {
             Vector2 movementToTry = destination - originalPosition;
             Vector2 furthestFreePosition = originalPosition;
@@ -92,6 +101,7 @@ namespace SacreBleu.Levels
             }
         }
 
+        /*
         //major aspect of collision system
         //calculates nearest free space relative to object's position and velocity
         public Vector2 CalculateFreePosition(MoveableGameObject checkObject, Vector2 originalPosition, Vector2 destination, Rectangle boundingBox)
@@ -131,6 +141,7 @@ namespace SacreBleu.Levels
 
             return furthestFreePosition;
         }
+        */
 
         //creates rectangle used for testing collisions
         private Rectangle CreateCollisionTestRectangle(Vector2 positionToTry, int width, int height)
@@ -149,6 +160,8 @@ namespace SacreBleu.Levels
                 h.Draw();
 
             _frog.Draw();
+            button.Draw();
+            powerBar.Draw();
 
             SacreBleuGame._instance._spriteBatch.End();
         }

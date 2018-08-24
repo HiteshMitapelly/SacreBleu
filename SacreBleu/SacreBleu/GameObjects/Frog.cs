@@ -18,22 +18,16 @@ namespace SacreBleu.GameObjects
         Vector2 _mouseInitPosition, _mouseFinalPosition;
         Vector2 worldPosition;
 
-
+        public float _maxVelocity = 25f;
         bool dragging;
 		MouseState oldMouseState;
 		Rectangle _line;
 		Vector2 _lineVector;
 		float angle;
 
-        //float Xoffset, Yoffset,counter;
-        //bool released;
-        //Rectangle bbox;
-        //Vector2 frogPosition;
-
         bool inRange;
 
-
-		public Frog(Vector2 position, Texture2D sprite, float drag) : base(position, sprite, drag)
+		public Frog(Vector2 position, Texture2D sprite, float drag, float bounce) : base(position, sprite, drag, bounce)
 		{
 			_tag = "Frog";
 			_instance = this;

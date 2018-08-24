@@ -51,7 +51,6 @@
     <Compile Include="GameObjects\GameObject.cs" />
     <Compile Include="GameObjects\Hazard.cs" />
     <Compile Include="GameObjects\Obstacle.cs" />
-    <Compile Include="GameObjects\TestPlayer.cs" />
     <Compile Include="Levels\BaseLevel.cs" />
     <Compile Include="Levels\LevelTest.cs" />
     <Compile Include="Program.cs" />

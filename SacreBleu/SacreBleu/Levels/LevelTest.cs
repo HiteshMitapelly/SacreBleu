@@ -23,10 +23,10 @@ namespace SacreBleu.Levels
             instance = this;
 
             _obstacles = new List<Obstacle>();
-            _obstacles.Add(new Obstacle(new Vector2(100, 100), sprite));
-            _obstacles.Add(new Obstacle(new Vector2(132, 100), sprite));
             _obstacles.Add(new Obstacle(new Vector2(164, 100), sprite));
             _obstacles.Add(new Obstacle(new Vector2(196, 100), sprite));
+            _obstacles.Add(new Obstacle(new Vector2(228, 100), sprite));
+            _obstacles.Add(new Obstacle(new Vector2(256, 100), sprite));
 
             _hazards = new List<Hazard>();
 

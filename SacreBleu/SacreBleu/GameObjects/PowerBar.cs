@@ -53,7 +53,7 @@ namespace SacreBleu.GameObjects
 			
 			Debug.WriteLine("power generated " + powerMagnitude);
 			Vector2 direction = new Vector2(0,-1);
-			Frog._instance.SetVelocity(powerMagnitude * direction );
+			Frog._instance.SetVelocity(powerMagnitude * direction * Frog._instance._maxVelocity);
 
 		}
 		public override void Draw()
