@@ -11,27 +11,31 @@ namespace SacreBleu.Levels
 {
     class BaseLevel
     {
-        Camera camera;
+        //camera reference
+        Camera _camera;
 
+        //references to all the game objects in any given level
         public Frog _frog;
         public Obstacle[] _obstacles;
         public Hazard[] _hazards;
 
         public BaseLevel(Vector2 frogStartingPosition, Obstacle[] obstacles, Hazard[] hazards)
         {
-            camera = new Camera();
+            _camera = new Camera();
 
-            _frog = new Frog(frogStartingPosition, SacreBleuGame._instance.frogTexture, 0.1f);
+            _frog = new Frog(frogStartingPosition, SacreBleuGame._instance.basicSquare, 0.1f, 0.1f);
             _obstacles = obstacles;
             _hazards = hazards;
         }
 
+        //update game objects and camera
         public void Update(GameTime gameTime)
         {
             _frog.Update(gameTime);
-            camera.Follow(_frog);
+            _camera.Follow(_frog);
         }
 
+        //check for overlapping rectangles
         public GameObject RectangleOverlapping(Rectangle boundsToCheck)
         {
             foreach (Obstacle o in _obstacles)
@@ -48,7 +52,49 @@ namespace SacreBleu.Levels
             return null;
         }
 
-        public Vector2 CalculateFreePosition(GameObject checkObject, Vector2 originalPosition, Vector2 destination, Rectangle boundingBox)
+        public void WhereCanIGetTo(MoveableGameObject objectToCheck, Vector2 originalPosition, Vector2 destination, Rectangle boundingRectangle)
+        {
+            Vector2 movementToTry = destination - originalPosition;
+            Vector2 furthestFreePosition = originalPosition;
+            int movementStepCount = (int)(movementToTry.Length() * 2) + 1;
+            Vector2 oneStep = movementToTry / movementStepCount;
+
+            for (int i = 1; i <= movementStepCount; i++)
+            {
+                Vector2 positionToTry = originalPosition + oneStep * i;
+                Rectangle testBoundary =
+                    CreateCollisionTestRectangle(positionToTry, boundingRectangle.Width, boundingRectangle.Height);
+                if (RectangleOverlapping(testBoundary) == null)
+                    furthestFreePosition = positionToTry;
+                else
+                {
+                    objectToCheck._position = furthestFreePosition;
+
+                    Rectangle collisionTestX = CreateCollisionTestRectangle(new Vector2(objectToCheck._position.X - 1, objectToCheck._position.Y), boundingRectangle.Width + 2, boundingRectangle.Height);
+                    Rectangle collisionTestY = CreateCollisionTestRectangle(new Vector2(objectToCheck._position.X, objectToCheck._position.Y - 1), boundingRectangle.Width, boundingRectangle.Height + 2);
+
+                    //bounce!
+                    if (RectangleOverlapping(collisionTestX) != null)
+                    {
+                        objectToCheck._velocity.X *= -1 * _frog._bounce;
+                        objectToCheck._velocity.Y *= _frog._bounce;
+                    }
+                    if (RectangleOverlapping(collisionTestY) != null)
+                    {
+                        objectToCheck._velocity.Y *= -1 * _frog._bounce;
+                        objectToCheck._velocity.X *= _frog._bounce;
+                    }
+
+                    objectToCheck.AddVelocity();
+
+                    break;
+                }
+            }
+        }
+
+        //major aspect of collision system
+        //calculates nearest free space relative to object's position and velocity
+        public Vector2 CalculateFreePosition(MoveableGameObject checkObject, Vector2 originalPosition, Vector2 destination, Rectangle boundingBox)
         {
             Vector2 movementToTry = destination - originalPosition;
             Vector2 furthestFreePosition = originalPosition;
@@ -86,14 +132,16 @@ namespace SacreBleu.Levels
             return furthestFreePosition;
         }
 
+        //creates rectangle used for testing collisions
         private Rectangle CreateCollisionTestRectangle(Vector2 positionToTry, int width, int height)
         {
             return new Rectangle((int)positionToTry.X, (int)positionToTry.Y, width, height);
         }
 
+        //draw all game objects
         public void Draw()
         {
-            SacreBleuGame._instance._spriteBatch.Begin(transformMatrix: camera.Transform);
+            SacreBleuGame._instance._spriteBatch.Begin(transformMatrix: _camera.Transform);
 
             foreach (Obstacle o in _obstacles)
                 o.Draw();

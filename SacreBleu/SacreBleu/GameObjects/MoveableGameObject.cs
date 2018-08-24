@@ -11,27 +11,38 @@ namespace SacreBleu.GameObjects
 {
     class MoveableGameObject : GameObject
     {
+        GameTime _gameTime;
+
         public float _drag;
+        public float _bounce;
         public Vector2 _velocity;
 
-        public MoveableGameObject(Vector2 position, Texture2D sprite, float drag)
+        public MoveableGameObject(Vector2 position, Texture2D sprite, float drag, float bounce)
             : base(position, sprite)
         {
             _drag = drag;
+            _bounce = bounce;
         }
 
         public virtual void Update(GameTime gameTime)
         {
+            _gameTime = gameTime;
             ApplyDrag();
-            Move(gameTime);
+            Move();
         }
 
-        private void Move(GameTime gameTime)
+        private void Move()
         {
             Vector2 previousPosition = _position;
-            _position += _velocity * (float)gameTime.ElapsedGameTime.TotalMilliseconds / 15;
+            AddVelocity();
 
-            _position = LevelTest.instance.baseLevel.CalculateFreePosition(this, previousPosition, _position, _bounds);
+            LevelTest.instance.baseLevel.WhereCanIGetTo(this, previousPosition, _position, _bounds);
+            //_position = LevelTest.instance.baseLevel.CalculateFreePosition(this, previousPosition, _position, _bounds);
+        }
+
+        public void AddVelocity()
+        {
+            _position += _velocity * (float)_gameTime.ElapsedGameTime.TotalMilliseconds / 15;
         }
 
         public void SetVelocity(Vector2 velocity)
