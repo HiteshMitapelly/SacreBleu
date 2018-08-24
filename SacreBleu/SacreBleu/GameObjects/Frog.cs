@@ -12,6 +12,8 @@ namespace SacreBleu.GameObjects
 {
 	class Frog : MoveableGameObject
 	{
+		public static Frog _instance;
+
         MouseState mouseState;
         Vector2 _mouseInitPosition, _mouseFinalPosition;
         Vector2 worldPosition;
@@ -34,6 +36,7 @@ namespace SacreBleu.GameObjects
 		public Frog(Vector2 position, Texture2D sprite, float drag) : base(position, sprite, drag)
 		{
 			_tag = "Frog";
+			_instance = this;
 
             _mouseInitPosition = _position;
             dragging = false;
