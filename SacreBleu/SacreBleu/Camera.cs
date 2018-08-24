@@ -13,8 +13,12 @@ namespace SacreBleu
 {
 	public class Camera 
 	{
+		public static Camera _instance;
 		public Matrix Transform { get; private set; }
-		
+
+		public Camera() {
+			_instance = this;
+		}
 		public void Follow(GameObject target)  // target is frog
 		{
 			var position = Matrix.CreateTranslation(

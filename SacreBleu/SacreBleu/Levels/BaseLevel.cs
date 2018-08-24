@@ -12,20 +12,30 @@ namespace SacreBleu.Levels
     class BaseLevel
     {
 		//UI element references
-        PowerBar powerBar;
-        Button button;
-		DirectionGauge directionGauge;
+        public PowerBar _powerBar;
+        public Button _button;
+		public DirectionGauge _directionGauge;
 
-        //references to all the game objects in any given level
-        public Frog _frog;
+		//references to all the game objects in any given level
+
+		public Frog _frog;
         public Obstacle[] _obstacles;
         public Hazard[] _hazards;
 
+		//UI positions
+		Vector2 directionGaugePosition,powerBarPosition,buttonPosition;
+
         public BaseLevel(int[,] levelLayout)
         {
-			directionGauge = new DirectionGauge(new Vector2(100, 300), SacreBleuGame._instance.arrowTexture);
-            powerBar = new PowerBar(new Vector2(400, 450), SacreBleuGame._instance.basicSquare, SacreBleuGame._instance.basicSquare);
-            button = new Button(new Vector2(300, 400), SacreBleuGame._instance.basicSquare);
+			//declaring positions
+			directionGaugePosition = new Vector2(75f, SacreBleuGame._instance._screenHeight - 50f);
+			powerBarPosition = new Vector2(SacreBleuGame._instance._screenWidth - 75f, SacreBleuGame._instance._screenHeight - 75f);
+			buttonPosition = new Vector2(SacreBleuGame._instance._screenWidth - 150f, SacreBleuGame._instance._screenHeight - 75f);
+
+			//setting positions
+			_directionGauge = new DirectionGauge(directionGaugePosition, SacreBleuGame._instance.arrowTexture);
+            _powerBar = new PowerBar(powerBarPosition, SacreBleuGame._instance.basicSquare, SacreBleuGame._instance.basicSquare);
+            _button = new Button(buttonPosition, SacreBleuGame._instance.basicSquare);
 
             GenerateLevel(levelLayout);
         }
@@ -76,9 +86,9 @@ namespace SacreBleu.Levels
         {
             _frog.Update(gameTime);
 
-            powerBar.Update(gameTime);
-            button.Update(gameTime);
-			directionGauge.Update(gameTime);
+            _powerBar.Update(gameTime);
+            _button.Update(gameTime);
+			_directionGauge.Update(gameTime);
         }
 
         //check for overlapping rectangles
@@ -195,9 +205,9 @@ namespace SacreBleu.Levels
                 h.Draw();
 
             _frog.Draw();
-            button.Draw();
-            powerBar.Draw();
-			directionGauge.Draw();
+            //_button.Draw();
+            //_powerBar.Draw();
+			//directionGauge.Draw();
         }
     }
 }

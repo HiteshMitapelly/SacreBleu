@@ -10,28 +10,31 @@ using Microsoft.Xna.Framework.Input;
 
 namespace SacreBleu.GameObjects
 {
-	class DirectionGauge :GameObject
+	class DirectionGauge : GameObject
 	{
 
 		public static DirectionGauge _instance;
 
 		Vector2 initBottomPosition;
 		KeyboardState keyboardState,previousKeyboardState;
-		public Vector2 _direction;
+
 		
 		
 		public float _angle;
 		float maxAngle;
 		float angleChange;
-		public DirectionGauge(Vector2 position, Texture2D sprite) : base(position,sprite)
+		public DirectionGauge(Vector2 position,Texture2D sprite) :base(position,sprite)
 		{
-			_instance = this;	
+			_instance = this;
+			
+			
 			_angle = 0f;
-			maxAngle = 0.7f;
-			angleChange = 0.1f;
+		
+			maxAngle = 0.3f;
+			angleChange = 0.05f;
 			initBottomPosition = new Vector2(_bounds.X, _bounds.Y + _bounds.Height);
-			Debug.WriteLine(initBottomPosition);
-
+			
+			
 		}
 
 		public void Update(GameTime gameTime)
@@ -42,20 +45,20 @@ namespace SacreBleu.GameObjects
 			if (keyboardState.IsKeyDown(Keys.Right) && !previousKeyboardState.IsKeyDown(Keys.Right))
 			{
 				
-				if(_angle < maxAngle)
+				if(_angle <= maxAngle)
 					_angle += angleChange;
 				
 			}
 			if (keyboardState.IsKeyDown(Keys.Left) && !previousKeyboardState.IsKeyDown(Keys.Left))
 			{
-				if(_angle > -maxAngle)
+				if(_angle >= -maxAngle)
 					_angle -= angleChange;
 			}
 			
 			previousKeyboardState = keyboardState;
 		}
 
-		public override void Draw()
+		public override void  Draw()
 		{
 			
 			var origin = new Vector2(_sprite.Width/2 , _sprite.Height );

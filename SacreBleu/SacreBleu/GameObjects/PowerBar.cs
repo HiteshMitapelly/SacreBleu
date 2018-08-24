@@ -50,38 +50,49 @@ namespace SacreBleu.GameObjects
 		public void setpower() {
 			
 			powerMagnitude = (float)Math.Round((1 - Math.Abs(powerBarHeight/_sprite.Height)),1);
+			direction = Vector2.Zero;
+			Frog._instance.SetVelocity(powerMagnitude * direction * Frog._instance._maxVelocity);
 			
-			Debug.WriteLine("power generated " + powerMagnitude);
+
 			float angle = DirectionGauge._instance._angle;
-			double degrees = MathHelper.ToDegrees(angle);
+			float degrees = MathHelper.ToDegrees(angle);
 
 			degrees = 90 - degrees;
+			
+
+			float tanValue;
+			float radians = MathHelper.ToRadians(degrees);
+			tanValue = (float)Math.Tan(radians);
+			
 			if (degrees < 90)
 			{
-				direction = new Vector2(1f, -(float)Math.Tan(degrees));
+				direction.X = (float)Math.Sqrt(1 / 1 + Math.Pow(tanValue, 2));
+				direction.Y = -direction.X * tanValue;
+				
 			}
 			if (degrees > 90)
 			{
-				direction = new Vector2(-1f, (float)Math.Tan(180 - degrees));
+				direction.X = -(float)Math.Sqrt(1 / 1 + Math.Pow(tanValue, 2));
+				direction.Y = -direction.X * tanValue;
+				
 			}
 			if (degrees == 90)
 			{
 				direction = new Vector2(0, -1);
 			}
-			direction.Normalize();//direction = new Vector2(-(float)Math.Cos(degrees), (float)Math.Sin(degrees));
-			
-			Debug.WriteLine(direction);
+		
+			direction.Normalize();
 
+			
 			Frog._instance.SetVelocity(powerMagnitude * direction * Frog._instance._maxVelocity);
 
 		}
 		public override void Draw()
 		{
+
 			
-			
-			base.Draw();
-			Vector2 adjustedRectanglePos = new Vector2(_position.X, _position.Y);
-			SacreBleuGame._instance._spriteBatch.Draw(powerBarTexture, adjustedRectanglePos, new Rectangle((int)_position.X, (int)_position.Y, _sprite.Width, (int) powerBarHeight), Color.Black);
+			SacreBleuGame._instance._spriteBatch.Draw(powerGaugeTexture, _position, new Rectangle((int)_position.X, (int)_position.Y, _sprite.Width,_sprite.Height ), Color.White);
+			SacreBleuGame._instance._spriteBatch.Draw(powerBarTexture, _position, new Rectangle((int)_position.X, (int)_position.Y, _sprite.Width, (int) powerBarHeight), Color.Black);
 		}
 
 	}

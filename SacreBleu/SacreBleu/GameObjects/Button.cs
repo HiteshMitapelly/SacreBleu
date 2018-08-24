@@ -11,24 +11,28 @@ namespace SacreBleu.GameObjects
 {
 	class Button : GameObject
 	{
+		public static Button _instance;
+
 		private Vector2 worldPosition;
 		MouseState mouseState, oldMouseState;
 		bool inRange;
+		Vector2 mousePosition;
 
-		public Button(Vector2 position, Texture2D sprite) : base(position, sprite) {
-
+		public Button(Vector2 position, Texture2D sprite) : base(position, sprite)
+		{
+			_instance = this;
 			_tag = "button";
 
 		}
 
 		public void Update(GameTime gameTime) {
-			Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
+			mousePosition = new Vector2(mouseState.X, mouseState.Y);
 
-			worldPosition = Vector2.Transform(mousePosition, Matrix.Invert(SacreBleuGame._instance._camera.Transform));
+			//worldPosition = Vector2.Transform(mousePosition, Matrix.Invert(SacreBleuGame._instance._camera.Transform));
 
 			mouseState = Mouse.GetState();
 			
-			inRange = GetBounds().Contains(new Point((int)worldPosition.X, (int)worldPosition.Y));
+			inRange = GetBounds().Contains(new Point((int)mousePosition.X, (int)mousePosition.Y));
 
 			if (inRange) {
 				
@@ -53,7 +57,7 @@ namespace SacreBleu.GameObjects
 		}
 		public override void Draw()
 		{
-						
+
 			base.Draw();
 			
 		}

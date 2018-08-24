@@ -98,11 +98,20 @@ namespace SacreBleu
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
-            _spriteBatch.Begin(transformMatrix: _camera.Transform);
+			// TODO: Add your drawing code here
+						
+			_spriteBatch.Begin(transformMatrix: _camera.Transform);
             levelTest.Draw();
             base.Draw(gameTime);
             _spriteBatch.End();
-        }
+
+			//Drawing UI sprites
+			_spriteBatch.Begin();
+			PowerBar._instance.Draw();
+			Button._instance.Draw();
+			DirectionGauge._instance.Draw();
+			_spriteBatch.End();
+
+		}
     }
 }
