@@ -146,12 +146,7 @@ namespace SacreBleu.GameObjects
             if(dragging)
                 SacreBleuGame._instance._spriteBatch.Draw(_sprite, _line, null, Color.White, angle, Vector2.Zero, SpriteEffects.None, 0);
 
-            SacreBleuGame._instance._spriteBatch.DrawString(SacreBleuGame._instance._levelFont, mouseState.X + " : " + mouseState.Y, new Vector2(worldPosition.X, worldPosition.Y), Color.Black);
-
-            if (inRange)
-            {
-                SacreBleuGame._instance._spriteBatch.DrawString(SacreBleuGame._instance._levelFont, "In Range", new Vector2(_position.X, _position.Y + 25), Color.Black);
-            }
+            //SacreBleuGame._instance._spriteBatch.DrawString(SacreBleuGame._instance._levelFont, mouseState.X + " : " + mouseState.Y, new Vector2(worldPosition.X, worldPosition.Y), Color.Black);
         }
 	}
 }

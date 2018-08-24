@@ -50,7 +50,7 @@ namespace SacreBleu.GameObjects
         {
             SacreBleuGame._instance._spriteBatch.Draw(_sprite, _position, null, _tint, _rotation, Vector2.Zero, _scale, SpriteEffects.None, 0f);
 
-            SacreBleuGame._instance._spriteBatch.DrawString(SacreBleuGame._instance._levelFont, _tag+" "+_position, _position, Color.Black);
+            //SacreBleuGame._instance._spriteBatch.DrawString(SacreBleuGame._instance._levelFont, _tag+" "+_position, _position, Color.Black);
         }
     }
 }
