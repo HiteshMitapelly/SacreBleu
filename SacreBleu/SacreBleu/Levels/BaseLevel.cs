@@ -14,8 +14,10 @@ namespace SacreBleu.Levels
         //camera reference
         Camera _camera;
 
+		//UI element references
         PowerBar powerBar;
         Button button;
+		DirectionGauge directionGauge;
 
         //references to all the game objects in any given level
         public Frog _frog;
@@ -26,6 +28,7 @@ namespace SacreBleu.Levels
         {
             _camera = new Camera();
 
+			directionGauge = new DirectionGauge(new Vector2(100, 300), SacreBleuGame._instance.arrowTexture);
             powerBar = new PowerBar(new Vector2(400, 450), SacreBleuGame._instance.basicSquare, SacreBleuGame._instance.basicSquare);
             button = new Button(new Vector2(300, 400), SacreBleuGame._instance.basicSquare);
 
@@ -42,6 +45,7 @@ namespace SacreBleu.Levels
 
             powerBar.Update(gameTime);
             button.Update(gameTime);
+			directionGauge.Update(gameTime);
         }
 
         //check for overlapping rectangles
@@ -162,6 +166,7 @@ namespace SacreBleu.Levels
             _frog.Draw();
             button.Draw();
             powerBar.Draw();
+			directionGauge.Draw();
 
             SacreBleuGame._instance._spriteBatch.End();
         }

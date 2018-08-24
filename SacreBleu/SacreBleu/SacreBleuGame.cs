@@ -17,6 +17,7 @@ namespace SacreBleu
 		public Vector2 _worldPosition;
 		//texture references
 		public Texture2D frogTexture;
+		public Texture2D arrowTexture;
 
         //testing level design
         public Texture2D basicSquare;
@@ -53,8 +54,9 @@ namespace SacreBleu
 			currentState = Gamestates.READY;
             
             //load textures
-			frogTexture = Content.Load<Texture2D>("ball");
+			frogTexture = Content.Load<Texture2D>("Sprites/ball");
             basicSquare = Content.Load<Texture2D>("Sprites/BasicSquare");
+			arrowTexture = Content.Load<Texture2D>("Sprites/texture");
 
             //load fonts
             _levelFont = Content.Load<SpriteFont>("Fonts/Bebas");

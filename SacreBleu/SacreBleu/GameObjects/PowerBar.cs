@@ -14,8 +14,8 @@ namespace SacreBleu.GameObjects
 	class PowerBar : GameObject
 	{
 		public static PowerBar _instance;
-	   
-		
+
+		Vector2 direction;
 		Texture2D powerBarTexture, powerGaugeTexture;
 		float powerBarHeight;
 		float powerMagnitude;
@@ -48,11 +48,30 @@ namespace SacreBleu.GameObjects
 		}
 
 		public void setpower() {
-
+			
 			powerMagnitude = (float)Math.Round((1 - Math.Abs(powerBarHeight/_sprite.Height)),1);
 			
 			Debug.WriteLine("power generated " + powerMagnitude);
-			Vector2 direction = new Vector2(0,-1);
+			float angle = DirectionGauge._instance._angle;
+			double degrees = MathHelper.ToDegrees(angle);
+
+			degrees = 90 - degrees;
+			if (degrees < 90)
+			{
+				direction = new Vector2(1f, -(float)Math.Tan(degrees));
+			}
+			if (degrees > 90)
+			{
+				direction = new Vector2(-1f, (float)Math.Tan(180 - degrees));
+			}
+			if (degrees == 90)
+			{
+				direction = new Vector2(0, -1);
+			}
+			direction.Normalize();//direction = new Vector2(-(float)Math.Cos(degrees), (float)Math.Sin(degrees));
+			
+			Debug.WriteLine(direction);
+
 			Frog._instance.SetVelocity(powerMagnitude * direction * Frog._instance._maxVelocity);
 
 		}
