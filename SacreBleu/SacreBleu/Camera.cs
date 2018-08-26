@@ -71,8 +71,8 @@ namespace SacreBleu
 				viewPort.Bounds.Width / 2,
 				viewPort.Bounds.Height / 2,
 				0);
-			Transform = Matrix.Lerp(offset,translation * offset, 1f);
-			//Transform = translation * offset;
+
+			Transform = Matrix.Lerp(Transform, translation * offset, 0.1f);
 								
 			previousKeyboardState = keyboardState;
 		}
