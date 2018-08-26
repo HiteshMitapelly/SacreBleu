@@ -57,7 +57,7 @@ namespace SacreBleu
 				
 			}
 
-			Vector2 clampMaxforCamera = new Vector2(viewPort.Width,2000f - viewPort.Height);
+			Vector2 clampMaxforCamera = new Vector2(viewPort.Width,1650f - viewPort.Height);
 
 			Vector2 clampMinforCamera = new Vector2(viewPort.Width, viewPort.Height - viewPort.Height / 2);
 
@@ -71,8 +71,8 @@ namespace SacreBleu
 				viewPort.Bounds.Width / 2,
 				viewPort.Bounds.Height / 2,
 				0);
-			
-			Transform = translation * offset;
+			Transform = Matrix.Lerp(offset,translation * offset, 1f);
+			//Transform = translation * offset;
 								
 			previousKeyboardState = keyboardState;
 		}
