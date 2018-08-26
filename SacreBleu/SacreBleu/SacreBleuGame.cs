@@ -51,7 +51,7 @@ namespace SacreBleu
 			_screenHeight = _graphics.PreferredBackBufferHeight;
 			_screenWidth = _graphics.PreferredBackBufferWidth;
             
-            _camera = new Camera();
+            _camera = new Camera(GraphicsDevice.Viewport);
 
             base.Initialize();
         }
@@ -88,7 +88,7 @@ namespace SacreBleu
 
 			// TODO: Add your update logic here
             levelTest.baseLevel.Update(gameTime);
-            _camera.Follow(levelTest.baseLevel._frog);
+            _camera.Update(levelTest.baseLevel._frog._position);
 
             base.Update(gameTime);
         }

@@ -89,6 +89,7 @@ namespace SacreBleu.Levels
             _powerBar.Update(gameTime);
             _button.Update(gameTime);
 			_directionGauge.Update(gameTime);
+
         }
 
         //check for overlapping rectangles

@@ -39,92 +39,48 @@ namespace SacreBleu.GameObjects
 
         public override void Update(GameTime gameTime)
 		{
-            Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
+			
+				Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
 
-            worldPosition = Vector2.Transform(mousePosition, Matrix.Invert(SacreBleuGame._instance._camera.Transform));
+				worldPosition = Vector2.Transform(mousePosition, Matrix.Invert(SacreBleuGame._instance._camera.Transform));
 
-            mouseState = Mouse.GetState();
-			inRange = GetBounds().Contains(new Point((int)worldPosition.X, (int)worldPosition.Y));
+				mouseState = Mouse.GetState();
+				inRange = GetBounds().Contains(new Point((int)worldPosition.X, (int)worldPosition.Y));
 
-			if (inRange)
-            { 
-				if ((oldMouseState.LeftButton == ButtonState.Released) && (mouseState.LeftButton == ButtonState.Pressed)) //player started to drag condition
+				if (inRange)
 				{
-					dragging = true;
-				    _mouseInitPosition = new Vector2(_position.X, _position.Y);	
+					if ((oldMouseState.LeftButton == ButtonState.Released) && (mouseState.LeftButton == ButtonState.Pressed)) //player started to drag condition
+					{
+						dragging = true;
+						_mouseInitPosition = new Vector2(_position.X, _position.Y);
+					}
 				}
-			}
 
-			if (((mouseState.LeftButton == ButtonState.Pressed) && (oldMouseState.LeftButton == ButtonState.Pressed)) && dragging) // in dragging state condition
-			{
-				Vector2 end = new Vector2(worldPosition.X, worldPosition.Y);
-				DragLine(_mouseInitPosition, end, Color.White, 1);
-			}
+				if (((mouseState.LeftButton == ButtonState.Pressed) && (oldMouseState.LeftButton == ButtonState.Pressed)) && dragging) // in dragging state condition
+				{
+					Vector2 end = new Vector2(worldPosition.X, worldPosition.Y);
+					DragLine(_mouseInitPosition, end, Color.White, 1);
+				}
 
-			if (((mouseState.LeftButton == ButtonState.Released)&&(oldMouseState.LeftButton == ButtonState.Pressed))&& dragging)  // dragged and released condition
-			{
-                Vector2 velocity = Vector2.Zero;
+				if (((mouseState.LeftButton == ButtonState.Released) && (oldMouseState.LeftButton == ButtonState.Pressed)) && dragging)  // dragged and released condition
+				{
+					Vector2 velocity = Vector2.Zero;
 
-				dragging = false;
-				_mouseFinalPosition = new Vector2(worldPosition.X, worldPosition.Y);
-                velocity = new Vector2(_mouseFinalPosition.X - _mouseInitPosition.X, _mouseFinalPosition.Y - _mouseInitPosition.Y);
-                //releaseFrog(gameTime);
-                SetVelocity(-velocity * 0.25f);
-				SacreBleuGame._instance.currentState = Gamestates.RELEASED;
-			}
+					dragging = false;
+					_mouseFinalPosition = new Vector2(worldPosition.X, worldPosition.Y);
+					velocity = new Vector2(_mouseFinalPosition.X - _mouseInitPosition.X, _mouseFinalPosition.Y - _mouseInitPosition.Y);
 
-            oldMouseState = mouseState;
+					SetVelocity(-velocity * 0.25f);
+					SacreBleuGame._instance.currentState = Gamestates.RELEASED;
+				}
 
+				oldMouseState = mouseState;
+			
             base.Update(gameTime);
 
 			
 
-			/* old code (pls dont delete this. I(Hitesh) might need for future reference)
-
-				if (SacreBleuGame._instance.currentState == Gamestates.READY)  // This is to drag frog
-			{
-				if ((mouseState.LeftButton == ButtonState.Pressed) && inRange)
-				{
-					dragging = true;
-					Vector2 end = new Vector2(mouseState.X, mouseState.Y);
-					dragLine(initPosition, end, Color.Black, 1);
-				}
-
-				if ((mouseState.LeftButton == ButtonState.Released) && dragging)
-				{
-					Debug.WriteLine("mouse" + mouseState.Y);
-					finalPosition = new Vector2(mouseState.X, mouseState.Y);
-					Debug.WriteLine("final pos " + finalPosition);
-					Xoffset = finalPosition.X - initPosition.X;
-					Yoffset = finalPosition.Y - initPosition.Y;
-					Xoffset *= 3;
-					Yoffset *= 3;
-					counter = Math.Abs(Yoffset);
-					frogVelocity = new Vector2(Xoffset, Yoffset);
-					
-
-					SacreBleuGame._instance.currentState = Gamestates.RELEASED;
-					dragging = false;
-				}
-			}
-
-			if ((SacreBleuGame._instance.currentState == Gamestates.RELEASED) && !dragging) // This is to release frog
-			{
-
-				released = true;
-				if (counter < 0)
-				{
-					released = false;
-					SacreBleuGame._instance.currentState = Gamestates.READY;
-					initPosition = _position;
-					
-					Debug.WriteLine("init " + initPosition);
-					Xoffset = 0;
-					Yoffset = 0;
-				}
-				if (released)
-					releaseFrog(gameTime);
-			}*/
+			
 
 			
 		}
