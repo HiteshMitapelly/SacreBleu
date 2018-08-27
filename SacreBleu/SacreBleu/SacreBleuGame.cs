@@ -2,11 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SacreBleu.GameObjects;
-using SacreBleu.Levels;
+using SacreBleu.Managers;
 
 namespace SacreBleu
 {
-	public enum Gamestates { PAUSED, READY, RELEASED}
     public class SacreBleuGame : Game
     {
         //game instance
@@ -19,6 +18,10 @@ namespace SacreBleu
         public int _tileWidth = 32;
         public float _scaleMultiplier = 0.0625f;
 
+        //managers
+        GameManager _gameManager;
+        LevelManager _levelManager;
+
         //camera reference
         public Camera _camera;
 
@@ -29,10 +32,6 @@ namespace SacreBleu
 
         //misc content
         public SpriteFont _levelFont;
-
-        LevelManager levelManager;
-
-        public Gamestates currentState;
 			
 		public SacreBleuGame()
         {
@@ -52,7 +51,11 @@ namespace SacreBleu
 			this.IsMouseVisible = true;
 			_screenHeight = _graphics.PreferredBackBufferHeight;
 			_screenWidth = _graphics.PreferredBackBufferWidth;
-            
+
+            //create managers
+            _gameManager = new GameManager();
+            _levelManager = new LevelManager();
+
             _camera = new Camera(GraphicsDevice.Viewport);
 
             base.Initialize();
@@ -62,9 +65,6 @@ namespace SacreBleu
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-			// TODO: use this.Content to load your game content here
-			currentState = Gamestates.READY;
             
             //load textures
 			frogTexture = Content.Load<Texture2D>("Sprites/Frog/frog_idle_top");
@@ -73,9 +73,6 @@ namespace SacreBleu
 
             //load fonts
             _levelFont = Content.Load<SpriteFont>("Fonts/Bebas");
-
-            //create level manager
-            levelManager = new LevelManager();
         }
 
         protected override void UnloadContent()
@@ -89,8 +86,8 @@ namespace SacreBleu
                 Exit();
 
             // TODO: Add your update logic here
-            levelManager.Update(gameTime);
-            _camera.Update(levelManager.currentLevel._frog._position);
+            _levelManager.Update(gameTime);
+            _camera.Update(_levelManager.currentLevel._frog._position);
 
             base.Update(gameTime);
         }
@@ -102,7 +99,7 @@ namespace SacreBleu
 
 			// TODO: Add your drawing code here						
 			_spriteBatch.Begin(transformMatrix: _camera.Transform);
-            levelManager.currentLevel.Draw();
+            _levelManager.currentLevel.Draw();
             base.Draw(gameTime);
             _spriteBatch.End();
 

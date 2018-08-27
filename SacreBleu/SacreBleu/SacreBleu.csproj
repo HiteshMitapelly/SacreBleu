@@ -48,7 +48,8 @@
     <Compile Include="GameObjects\PowerBar.cs" />
     <Compile Include="GameObjects\Frog.cs" />
     <Compile Include="GameObjects\MoveableGameObject.cs" />
-    <Compile Include="Levels\LevelManager.cs" />
+    <Compile Include="Managers\GameManager.cs" />
+    <Compile Include="Managers\LevelManager.cs" />
     <Compile Include="Levels\LevelOne.cs" />
     <Compile Include="SacreBleuGame.cs" />
     <Compile Include="GameObjects\GameObject.cs" />
@@ -118,9 +119,7 @@
     </None>
     <None Include="app.manifest" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Managers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

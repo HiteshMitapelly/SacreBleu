@@ -7,6 +7,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SacreBleu.Managers;
 
 namespace SacreBleu.GameObjects
 {
@@ -67,7 +68,7 @@ namespace SacreBleu.GameObjects
 					velocity = new Vector2(_mouseFinalPosition.X - _mouseInitPosition.X, _mouseFinalPosition.Y - _mouseInitPosition.Y);
 
 					SetVelocity(-velocity * 0.25f);
-					SacreBleuGame._instance.currentState = Gamestates.RELEASED;
+					GameManager._instance._currentState = GameManager.GameStates.RELEASED;
 				}
 
 				oldMouseState = mouseState;
