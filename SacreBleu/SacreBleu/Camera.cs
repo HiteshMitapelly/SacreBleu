@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SacreBleu.GameObjects;
+using SacreBleu.Levels;
 
 namespace SacreBleu
 {
@@ -56,10 +57,10 @@ namespace SacreBleu
 				_position = new Vector2(targetPosition.X, targetPosition.Y);
 				
 			}
+            
+			Vector2 clampMaxforCamera = new Vector2(viewPort.Width, LevelManager._instance.currentLevel.levelLayout.GetLength(0) * 32 - (viewPort.Height / 2));
 
-			Vector2 clampMaxforCamera = new Vector2(viewPort.Width,1650f - viewPort.Height);
-
-			Vector2 clampMinforCamera = new Vector2(viewPort.Width, viewPort.Height - viewPort.Height / 2);
+			Vector2 clampMinforCamera = new Vector2(viewPort.Width, viewPort.Height / 2);
 
 			_position =Vector2.Clamp(_position, clampMinforCamera, clampMaxforCamera);
 			var translation = Matrix.CreateTranslation(

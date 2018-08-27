@@ -36,7 +36,7 @@ namespace SacreBleu.GameObjects
             Vector2 previousPosition = _position;
             AddVelocity();
 
-            LevelTest.instance.baseLevel.CollisionCheck(this, previousPosition, _position, _bounds);
+            LevelManager._instance.currentLevel.CollisionCheck(this, previousPosition, _position, _bounds);
             //_position = LevelTest.instance.baseLevel.CalculateFreePosition(this, previousPosition, _position, _bounds);
         }
 

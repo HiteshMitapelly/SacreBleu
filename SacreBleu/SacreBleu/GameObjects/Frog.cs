@@ -11,14 +11,12 @@ using Microsoft.Xna.Framework.Input;
 namespace SacreBleu.GameObjects
 {
 	class Frog : MoveableGameObject
-	{
-		public static Frog _instance;
-
+    { 
         MouseState mouseState;
         Vector2 _mouseInitPosition, _mouseFinalPosition;
         Vector2 worldPosition;
 
-        public float _maxVelocity = 25f;
+        public float _maxVelocity = 15f;
         bool dragging;
 		MouseState oldMouseState;
 		Rectangle _line;
@@ -30,8 +28,6 @@ namespace SacreBleu.GameObjects
 		public Frog(Vector2 position, Texture2D sprite, float drag, float bounce) : base(position, sprite, drag, bounce)
 		{
 			_tag = "Frog";
-			_instance = this;
-            _tint = Color.Green;
 
             _mouseInitPosition = _position;
             dragging = false;
@@ -77,12 +73,6 @@ namespace SacreBleu.GameObjects
 				oldMouseState = mouseState;
 			
             base.Update(gameTime);
-
-			
-
-			
-
-			
 		}
 
 		void DragLine(Vector2 begin, Vector2 currentPosition, Color color, int width = 1)
@@ -101,8 +91,6 @@ namespace SacreBleu.GameObjects
 			base.Draw();
             if(dragging)
                 SacreBleuGame._instance._spriteBatch.Draw(_sprite, _line, null, Color.White, angle, Vector2.Zero, SpriteEffects.None, 0);
-
-            //SacreBleuGame._instance._spriteBatch.DrawString(SacreBleuGame._instance._levelFont, mouseState.X + " : " + mouseState.Y, new Vector2(worldPosition.X, worldPosition.Y), Color.Black);
         }
 	}
 }

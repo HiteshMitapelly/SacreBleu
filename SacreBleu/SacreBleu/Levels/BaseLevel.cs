@@ -16,8 +16,8 @@ namespace SacreBleu.Levels
         public Button _button;
 		public DirectionGauge _directionGauge;
 
-		//references to all the game objects in any given level
-
+        //references to all the game objects in any given level
+        public int[,] levelLayout;
 		public Frog _frog;
         public Obstacle[] _obstacles;
         public Hazard[] _hazards;
@@ -25,10 +25,10 @@ namespace SacreBleu.Levels
 		//UI positions
 		Vector2 directionGaugePosition,powerBarPosition,buttonPosition;
 
-        public BaseLevel(int[,] levelLayout)
+        public BaseLevel()
         {
 			//declaring positions
-			directionGaugePosition = new Vector2(75f, SacreBleuGame._instance._screenHeight - 50f);
+			directionGaugePosition = new Vector2(125f, SacreBleuGame._instance._screenHeight - 50f);
 			powerBarPosition = new Vector2(SacreBleuGame._instance._screenWidth - 75f, SacreBleuGame._instance._screenHeight - 75f);
 			buttonPosition = new Vector2(SacreBleuGame._instance._screenWidth - 150f, SacreBleuGame._instance._screenHeight - 75f);
 
@@ -37,11 +37,13 @@ namespace SacreBleu.Levels
             _powerBar = new PowerBar(powerBarPosition, SacreBleuGame._instance.basicSquare, SacreBleuGame._instance.basicSquare);
             _button = new Button(buttonPosition, SacreBleuGame._instance.basicSquare);
 
-            GenerateLevel(levelLayout);
+            //GenerateLevel(levelLayout);
         }
 
-        private void GenerateLevel(int[,] levelLayout)
+        protected void GenerateLevel(int[,] layout)
         {
+            levelLayout = layout;
+
             //0 for background tile
             //1 for obstacle
             //2 for hazard
@@ -72,7 +74,7 @@ namespace SacreBleu.Levels
                     }
                     else if(number == 9)
                     {
-                        _frog = new Frog(tilePosition, SacreBleuGame._instance.basicSquare, 0.025f, 0.75f);
+                        _frog = new Frog(tilePosition, SacreBleuGame._instance.frogTexture, 0.015f, 0.5f);
                     }
                 }
             }
@@ -149,48 +151,6 @@ namespace SacreBleu.Levels
             }
         }
 
-        /*
-        //major aspect of collision system
-        //calculates nearest free space relative to object's position and velocity
-        public Vector2 CalculateFreePosition(MoveableGameObject checkObject, Vector2 originalPosition, Vector2 destination, Rectangle boundingBox)
-        {
-            Vector2 movementToTry = destination - originalPosition;
-            Vector2 furthestFreePosition = originalPosition;
-            int movementStepCount = (int)(movementToTry.Length() * 2) + 1;
-            Vector2 oneStep = movementToTry / movementStepCount;
-
-            for(int i = 0; i <= movementStepCount; i++)
-            {
-                Vector2 positionToTry = originalPosition + oneStep * i;
-                Rectangle testBoundary = CreateCollisionTestRectangle(positionToTry, boundingBox.Width, boundingBox.Height);
-                GameObject collisionObject = RectangleOverlapping(testBoundary);
-                if (collisionObject == null)
-                    furthestFreePosition = positionToTry;
-                else if (collisionObject._tag.Equals("Obstacle"))
-                {
-                    bool diagonalMove = movementToTry.X != 0 && movementToTry.Y != 0;
-                    if (diagonalMove)
-                    {
-                        int stepsLeft = movementStepCount - (i - 1);
-
-                        Vector2 remainingHorizontalMovement = oneStep.X * Vector2.UnitX * stepsLeft;
-                        Vector2 finalHorizontalPosition = furthestFreePosition + remainingHorizontalMovement;
-                        furthestFreePosition = CalculateFreePosition(checkObject, furthestFreePosition, finalHorizontalPosition, boundingBox);
-
-                        Vector2 remainingVerticalMovement = oneStep.Y * Vector2.UnitY * stepsLeft;
-                        Vector2 finalVerticalPosition = furthestFreePosition + remainingVerticalMovement;
-                        furthestFreePosition = CalculateFreePosition(checkObject, furthestFreePosition, finalVerticalPosition, boundingBox);
-                    }
-                    break;
-                }
-                else if (collisionObject._tag.Equals("Hazard"))
-                    checkObject.RegisterTriggerCollision(collisionObject);
-            }
-
-            return furthestFreePosition;
-        }
-        */
-
         //creates rectangle used for testing collisions
         private Rectangle CreateCollisionTestRectangle(Vector2 positionToTry, int width, int height)
         {
@@ -205,10 +165,11 @@ namespace SacreBleu.Levels
             foreach (Hazard h in _hazards)
                 h.Draw();
 
+
+            _directionGauge.Draw();
             _frog.Draw();
             //_button.Draw();
             //_powerBar.Draw();
-			//directionGauge.Draw();
         }
     }
 }

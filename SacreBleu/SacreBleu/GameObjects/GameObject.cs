@@ -48,9 +48,10 @@ namespace SacreBleu.GameObjects
 
         public virtual void Draw()
         {
-            SacreBleuGame._instance._spriteBatch.Draw(_sprite, _position, null, _tint, _rotation, Vector2.Zero, _scale, SpriteEffects.None, 0f);
+            //calculate scale multiplier
+            float scale = 32f / _sprite.Width;
 
-            //SacreBleuGame._instance._spriteBatch.DrawString(SacreBleuGame._instance._levelFont, _tag+" "+_position, _position, Color.Black);
+            SacreBleuGame._instance._spriteBatch.Draw(_sprite, _position, null, _tint, _rotation, Vector2.Zero, _scale, SpriteEffects.None, 0f);
         }
     }
 }

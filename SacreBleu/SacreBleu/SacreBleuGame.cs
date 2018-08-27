@@ -9,26 +9,28 @@ namespace SacreBleu
 	public enum Gamestates { PAUSED, READY, RELEASED}
     public class SacreBleuGame : Game
     {
+        //game instance
         public static SacreBleuGame _instance;
         
         //graphics
         public  int _screenWidth, _screenHeight;
         public GraphicsDeviceManager _graphics;
         public SpriteBatch _spriteBatch;
-		public Vector2 _worldPosition;
         public int _tileWidth = 32;
+        public float _scaleMultiplier = 0.0625f;
 
         //camera reference
         public Camera _camera;
 
-        //texture references
+        //textures
         public Texture2D frogTexture;
 		public Texture2D arrowTexture;
-
-        //testing level design
         public Texture2D basicSquare;
+
+        //misc content
         public SpriteFont _levelFont;
-        LevelTest levelTest;
+
+        LevelManager levelManager;
 
         public Gamestates currentState;
 			
@@ -65,15 +67,15 @@ namespace SacreBleu
 			currentState = Gamestates.READY;
             
             //load textures
-			frogTexture = Content.Load<Texture2D>("Sprites/ball");
+			frogTexture = Content.Load<Texture2D>("Sprites/Frog/frog_idle_top");
             basicSquare = Content.Load<Texture2D>("Sprites/BasicSquare");
 			arrowTexture = Content.Load<Texture2D>("Sprites/texture");
 
             //load fonts
             _levelFont = Content.Load<SpriteFont>("Fonts/Bebas");
 
-            //create level
-            levelTest = new LevelTest(basicSquare, _levelFont);
+            //create level manager
+            levelManager = new LevelManager();
         }
 
         protected override void UnloadContent()
@@ -86,9 +88,9 @@ namespace SacreBleu
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-			// TODO: Add your update logic here
-            levelTest.baseLevel.Update(gameTime);
-            _camera.Update(levelTest.baseLevel._frog._position);
+            // TODO: Add your update logic here
+            levelManager.Update(gameTime);
+            _camera.Update(levelManager.currentLevel._frog._position);
 
             base.Update(gameTime);
         }
@@ -98,18 +100,16 @@ namespace SacreBleu
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-			// TODO: Add your drawing code here
-						
+			// TODO: Add your drawing code here						
 			_spriteBatch.Begin(transformMatrix: _camera.Transform);
-            levelTest.Draw();
+            levelManager.currentLevel.Draw();
             base.Draw(gameTime);
             _spriteBatch.End();
 
 			//Drawing UI sprites
 			_spriteBatch.Begin();
-			PowerBar._instance.Draw();
-			Button._instance.Draw();
-			DirectionGauge._instance.Draw();
+            LevelManager._instance.currentLevel._powerBar.Draw();
+            LevelManager._instance.currentLevel._button.Draw();
 			_spriteBatch.End();
 
 		}

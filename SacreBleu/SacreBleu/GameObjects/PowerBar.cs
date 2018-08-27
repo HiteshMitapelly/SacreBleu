@@ -7,14 +7,12 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
+using SacreBleu.Levels;
 
 namespace SacreBleu.GameObjects
 {
 	class PowerBar : GameObject
 	{
-		public static PowerBar _instance;
-
 		Vector2 direction;
 		Texture2D powerBarTexture, powerGaugeTexture;
 		float powerBarHeight;
@@ -24,7 +22,6 @@ namespace SacreBleu.GameObjects
 		
 		public PowerBar(Vector2 position,Texture2D healthBar,Texture2D healthGauge) : base(position,healthBar)
 		{
-			_instance = this;
 			powerBarTexture = healthBar;
 			powerGaugeTexture = healthGauge;
 			powerBarHeight = powerBarTexture.Height;
@@ -41,24 +38,19 @@ namespace SacreBleu.GameObjects
 
 				if ((powerBarHeight > (powerBarTexture.Height)) || (powerBarHeight < 0))
 					heightFactor = -heightFactor;
-
 			}
-
-
 		}
 
 		public void setpower() {
 			
 			powerMagnitude = (float)Math.Round((1 - Math.Abs(powerBarHeight/_sprite.Height)),1);
 			direction = Vector2.Zero;
-			Frog._instance.SetVelocity(powerMagnitude * direction * Frog._instance._maxVelocity);
-			
+            LevelManager._instance.currentLevel._frog.SetVelocity(powerMagnitude * direction * LevelManager._instance.currentLevel._frog._maxVelocity);			
 
-			float angle = DirectionGauge._instance._angle;
+			float angle = LevelManager._instance.currentLevel._directionGauge._angle;
 			float degrees = MathHelper.ToDegrees(angle);
 
-			degrees = 90 - degrees;
-			
+			degrees = 90 - degrees;			
 
 			float tanValue;
 			float radians = MathHelper.ToRadians(degrees);
@@ -67,14 +59,12 @@ namespace SacreBleu.GameObjects
 			if (degrees < 90)
 			{
 				direction.X = (float)Math.Sqrt(1 / 1 + Math.Pow(tanValue, 2));
-				direction.Y = -direction.X * tanValue;
-				
+				direction.Y = -direction.X * tanValue;				
 			}
 			if (degrees > 90)
 			{
 				direction.X = -(float)Math.Sqrt(1 / 1 + Math.Pow(tanValue, 2));
-				direction.Y = -direction.X * tanValue;
-				
+				direction.Y = -direction.X * tanValue;				
 			}
 			if (degrees == 90)
 			{
@@ -83,14 +73,10 @@ namespace SacreBleu.GameObjects
 		
 			direction.Normalize();
 
-			
-			Frog._instance.SetVelocity(powerMagnitude * direction * Frog._instance._maxVelocity);
-
+            LevelManager._instance.currentLevel._frog.SetVelocity(powerMagnitude * direction * LevelManager._instance.currentLevel._frog._maxVelocity);
 		}
 		public override void Draw()
-		{
-
-			
+		{			
 			SacreBleuGame._instance._spriteBatch.Draw(powerGaugeTexture, _position, new Rectangle((int)_position.X, (int)_position.Y, _sprite.Width,_sprite.Height ), Color.White);
 			SacreBleuGame._instance._spriteBatch.Draw(powerBarTexture, _position, new Rectangle((int)_position.X, (int)_position.Y, _sprite.Width, (int) powerBarHeight), Color.Black);
 		}

@@ -48,12 +48,14 @@
     <Compile Include="GameObjects\PowerBar.cs" />
     <Compile Include="GameObjects\Frog.cs" />
     <Compile Include="GameObjects\MoveableGameObject.cs" />
+    <Compile Include="Levels\LevelManager.cs" />
+    <Compile Include="Levels\LevelOne.cs" />
     <Compile Include="SacreBleuGame.cs" />
     <Compile Include="GameObjects\GameObject.cs" />
     <Compile Include="GameObjects\Hazard.cs" />
     <Compile Include="GameObjects\Obstacle.cs" />
     <Compile Include="Levels\BaseLevel.cs" />
-    <Compile Include="Levels\LevelTest.cs" />
+    <Compile Include="Levels\ExampleLevel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
