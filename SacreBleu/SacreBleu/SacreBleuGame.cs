@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SacreBleu.GameObjects;
 using SacreBleu.Managers;
 
 namespace SacreBleu
@@ -10,9 +9,9 @@ namespace SacreBleu
     {
         //game instance
         public static SacreBleuGame _instance;
-        
+
         //graphics
-        public  int _screenWidth, _screenHeight;
+        public int _screenWidth, _screenHeight;
         public GraphicsDeviceManager _graphics;
         public SpriteBatch _spriteBatch;
         public int _tileWidth = 32;
@@ -27,15 +26,15 @@ namespace SacreBleu
 
         //textures
         public Texture2D frogTexture;
-		public Texture2D arrowTexture;
+        public Texture2D arrowTexture;
         public Texture2D basicSquare;
 
         //misc content
         public SpriteFont _levelFont;
-			
-		public SacreBleuGame()
+
+        public SacreBleuGame()
         {
-            if(_instance == null)
+            if (_instance == null)
                 _instance = this;
 
             _graphics = new GraphicsDeviceManager(this);
@@ -47,10 +46,10 @@ namespace SacreBleu
 
         protected override void Initialize()
         {
-			// TODO: Add your initialization logic here
-			this.IsMouseVisible = true;
-			_screenHeight = _graphics.PreferredBackBufferHeight;
-			_screenWidth = _graphics.PreferredBackBufferWidth;
+            // TODO: Add your initialization logic here
+            this.IsMouseVisible = true;
+            _screenHeight = _graphics.PreferredBackBufferHeight;
+            _screenWidth = _graphics.PreferredBackBufferWidth;
 
             //create managers
             _gameManager = new GameManager();
@@ -65,11 +64,11 @@ namespace SacreBleu
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            
+
             //load textures
-			frogTexture = Content.Load<Texture2D>("Sprites/Frog/frog_idle_top");
+            frogTexture = Content.Load<Texture2D>("Sprites/Frog/frog_idle_top");
             basicSquare = Content.Load<Texture2D>("Sprites/BasicSquare");
-			arrowTexture = Content.Load<Texture2D>("Sprites/texture");
+            arrowTexture = Content.Load<Texture2D>("Sprites/texture");
 
             //load fonts
             _levelFont = Content.Load<SpriteFont>("Fonts/Bebas");
@@ -97,18 +96,18 @@ namespace SacreBleu
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-			// TODO: Add your drawing code here						
-			_spriteBatch.Begin(transformMatrix: _camera.Transform);
+            // TODO: Add your drawing code here						
+            _spriteBatch.Begin(transformMatrix: _camera.Transform);
             _levelManager.currentLevel.Draw();
             base.Draw(gameTime);
             _spriteBatch.End();
 
-			//Drawing UI sprites
-			_spriteBatch.Begin();
+            //Drawing UI sprites
+            _spriteBatch.Begin();
             LevelManager._instance.currentLevel._powerBar.Draw();
             LevelManager._instance.currentLevel._button.Draw();
-			_spriteBatch.End();
+            _spriteBatch.End();
 
-		}
+        }
     }
 }

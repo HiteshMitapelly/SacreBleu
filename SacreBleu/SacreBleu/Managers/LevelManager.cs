@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SacreBleu.Levels;
+using System.Collections.Generic;
 
 namespace SacreBleu.Managers
 {
@@ -40,7 +36,7 @@ namespace SacreBleu.Managers
                 levelIndex--;
                 ChangeLevel(levels[levelIndex]);
             }
-            else if(kstate.IsKeyDown(Keys.Right) && levelIndex < levels.Count - 1)
+            else if (kstate.IsKeyDown(Keys.Right) && levelIndex < levels.Count - 1)
             {
                 levelIndex++;
                 ChangeLevel(levels[levelIndex]);
