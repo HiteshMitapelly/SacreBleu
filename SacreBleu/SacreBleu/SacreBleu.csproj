@@ -45,9 +45,11 @@
     <Compile Include="Camera.cs" />
     <Compile Include="GameObjects\Button.cs" />
     <Compile Include="GameObjects\DirectionGauge.cs" />
+    <Compile Include="GameObjects\Goal.cs" />
     <Compile Include="GameObjects\PowerBar.cs" />
     <Compile Include="GameObjects\Frog.cs" />
     <Compile Include="GameObjects\MoveableGameObject.cs" />
+    <Compile Include="Levels\LevelThree.cs" />
     <Compile Include="Managers\GameManager.cs" />
     <Compile Include="Managers\LevelManager.cs" />
     <Compile Include="Levels\LevelOne.cs" />
@@ -56,7 +58,7 @@
     <Compile Include="GameObjects\Hazard.cs" />
     <Compile Include="GameObjects\Obstacle.cs" />
     <Compile Include="Levels\BaseLevel.cs" />
-    <Compile Include="Levels\ExampleLevel.cs" />
+    <Compile Include="Levels\LevelTwo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

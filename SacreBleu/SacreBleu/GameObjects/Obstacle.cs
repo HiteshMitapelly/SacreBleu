@@ -11,10 +11,5 @@ namespace SacreBleu.GameObjects
             _tag = "Obstacle";
             _tint = Color.Black;
         }
-
-        public override void Draw()
-        {
-            base.Draw();
-        }
     }
 }

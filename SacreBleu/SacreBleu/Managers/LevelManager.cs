@@ -10,17 +10,19 @@ namespace SacreBleu.Managers
         public static LevelManager _instance;
 
         public List<BaseLevel> levels;
-        private int levelIndex = 0;
+        private int levelIndex;
         public BaseLevel currentLevel;
 
         public LevelManager()
         {
             _instance = this;
 
-            levels = new List<BaseLevel>();
-
-            levels.Add(new LevelOne());
-            levels.Add(new ExampleLevel());
+            levels = new List<BaseLevel>
+            {
+                new LevelOne(),
+                new LevelTwo(),
+                new LevelThree()
+            };
 
             currentLevel = levels[levelIndex];
         }
@@ -36,16 +38,22 @@ namespace SacreBleu.Managers
                 levelIndex--;
                 ChangeLevel(levels[levelIndex]);
             }
-            else if (kstate.IsKeyDown(Keys.Right) && levelIndex < levels.Count - 1)
-            {
-                levelIndex++;
-                ChangeLevel(levels[levelIndex]);
-            }
+            else if (kstate.IsKeyDown(Keys.Right))
+                GoToNextLevel();
         }
 
         private void ChangeLevel(BaseLevel newLevel)
         {
             currentLevel = newLevel;
+        }
+
+        public void GoToNextLevel()
+        {
+            if (levelIndex < levels.Count - 1)
+            {
+                levelIndex++;
+                ChangeLevel(levels[levelIndex]);
+            }
         }
     }
 }

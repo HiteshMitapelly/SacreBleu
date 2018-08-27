@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using SacreBleu.GameObjects;
+using SacreBleu.Managers;
 using System.Collections.Generic;
 
 namespace SacreBleu.Levels
@@ -14,6 +15,8 @@ namespace SacreBleu.Levels
         //references to all the game objects in any given level
         public int[,] levelLayout;
         public Frog _frog;
+        private Vector2 _frogStartingPosition;
+        public Goal _goal;
         public Obstacle[] _obstacles;
         public Hazard[] _hazards;
 
@@ -42,6 +45,7 @@ namespace SacreBleu.Levels
             //0 for background tile
             //1 for obstacle
             //2 for hazard
+            //6 for goal
             //9 for frog
             List<Obstacle> tempObstacles = new List<Obstacle>();
             List<Hazard> tempHazards = new List<Hazard>();
@@ -65,11 +69,16 @@ namespace SacreBleu.Levels
                     }
                     else if (number == 2)
                     {
-                        tempHazards.Add(new Hazard(tilePosition, SacreBleuGame._instance.basicSquare));
+                        tempHazards.Add(new Hazard(tilePosition, SacreBleuGame._instance.fireTexture));
+                    }
+                    else if (number == 6)
+                    {
+                        _goal = new Goal(tilePosition, SacreBleuGame._instance.goalTexture);
                     }
                     else if (number == 9)
                     {
-                        _frog = new Frog(tilePosition, SacreBleuGame._instance.frogTexture, 0.015f, 0.5f);
+                        _frogStartingPosition = tilePosition;
+                        _frog = new Frog(_frogStartingPosition, SacreBleuGame._instance.frogTexture, 0.015f, 0.5f);
                     }
                 }
             }
@@ -92,6 +101,9 @@ namespace SacreBleu.Levels
         //check for overlapping rectangles
         public GameObject RectangleOverlapping(Rectangle boundsToCheck)
         {
+            if (_goal._bounds.Intersects(boundsToCheck))
+                return _goal;
+
             foreach (Obstacle o in _obstacles)
             {
                 if (o._bounds.Intersects(boundsToCheck))
@@ -118,9 +130,12 @@ namespace SacreBleu.Levels
                 Vector2 positionToTry = originalPosition + oneStep * i;
                 Rectangle testBoundary =
                     CreateCollisionTestRectangle(positionToTry, boundingRectangle.Width, boundingRectangle.Height);
-                if (RectangleOverlapping(testBoundary) == null)
+
+                GameObject objectOverlapping = RectangleOverlapping(testBoundary);
+
+                if (objectOverlapping == null)
                     furthestFreePosition = positionToTry;
-                else
+                else if (objectOverlapping._tag.Equals("Obstacle"))
                 {
                     objectToCheck._position = furthestFreePosition;
 
@@ -143,6 +158,15 @@ namespace SacreBleu.Levels
 
                     break;
                 }
+                else if (objectOverlapping._tag.Equals("Hazard"))
+                {
+                    RestartLevel();
+                }
+                else if (objectOverlapping._tag.Equals("Goal"))
+                {
+                    if (_frog._velocity.Length() <= 0f)
+                        LevelManager._instance.GoToNextLevel();
+                }
             }
         }
 
@@ -150,6 +174,13 @@ namespace SacreBleu.Levels
         private Rectangle CreateCollisionTestRectangle(Vector2 positionToTry, int width, int height)
         {
             return new Rectangle((int)positionToTry.X, (int)positionToTry.Y, width, height);
+        }
+
+        private void RestartLevel()
+        {
+            _frog._velocity = Vector2.Zero;
+            _frog._position = _frogStartingPosition;
+            _directionGauge._angle = 0f;
         }
 
         //draw all game objects
@@ -160,7 +191,7 @@ namespace SacreBleu.Levels
             foreach (Hazard h in _hazards)
                 h.Draw();
 
-
+            _goal.Draw();
             _directionGauge.Draw();
             _frog.Draw();
             //_button.Draw();

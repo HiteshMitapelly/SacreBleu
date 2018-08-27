@@ -28,6 +28,8 @@ namespace SacreBleu
         public Texture2D frogTexture;
         public Texture2D arrowTexture;
         public Texture2D basicSquare;
+        public Texture2D goalTexture;
+        public Texture2D fireTexture;
 
         //misc content
         public SpriteFont _levelFont;
@@ -65,6 +67,8 @@ namespace SacreBleu
             frogTexture = Content.Load<Texture2D>("Sprites/Frog/frog_idle_top");
             basicSquare = Content.Load<Texture2D>("Sprites/BasicSquare");
             arrowTexture = Content.Load<Texture2D>("Sprites/texture");
+            goalTexture = Content.Load<Texture2D>("Sprites/Props/temp_goal");
+            fireTexture = Content.Load<Texture2D>("Sprites/Props/temp_hazard");
 
             //load fonts
             _levelFont = Content.Load<SpriteFont>("Fonts/Bebas");
