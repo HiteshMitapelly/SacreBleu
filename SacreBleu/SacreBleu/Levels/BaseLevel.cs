@@ -1,39 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using SacreBleu.GameObjects;
+using System.Collections.Generic;
 
 namespace SacreBleu.Levels
 {
     class BaseLevel
     {
-		//UI element references
+        //UI element references
         public PowerBar _powerBar;
         public Button _button;
-		public DirectionGauge _directionGauge;
+        public DirectionGauge _directionGauge;
 
         //references to all the game objects in any given level
         public int[,] levelLayout;
-		public Frog _frog;
+        public Frog _frog;
         public Obstacle[] _obstacles;
         public Hazard[] _hazards;
 
-		//UI positions
-		Vector2 directionGaugePosition,powerBarPosition,buttonPosition;
+        //UI positions
+        Vector2 directionGaugePosition, powerBarPosition, buttonPosition;
 
         public BaseLevel()
         {
-			//declaring positions
-			directionGaugePosition = new Vector2(125f, SacreBleuGame._instance._screenHeight - 50f);
-			powerBarPosition = new Vector2(SacreBleuGame._instance._screenWidth - 75f, SacreBleuGame._instance._screenHeight - 75f);
-			buttonPosition = new Vector2(SacreBleuGame._instance._screenWidth - 150f, SacreBleuGame._instance._screenHeight - 75f);
+            //declaring positions
+            directionGaugePosition = new Vector2(125f, SacreBleuGame._instance._screenHeight - 50f);
+            powerBarPosition = new Vector2(SacreBleuGame._instance._screenWidth - 75f, SacreBleuGame._instance._screenHeight - 75f);
+            buttonPosition = new Vector2(SacreBleuGame._instance._screenWidth - 150f, SacreBleuGame._instance._screenHeight - 75f);
 
-			//setting positions
-			_directionGauge = new DirectionGauge(directionGaugePosition, SacreBleuGame._instance.arrowTexture);
+            //setting positions
+            _directionGauge = new DirectionGauge(directionGaugePosition, SacreBleuGame._instance.arrowTexture);
             _powerBar = new PowerBar(powerBarPosition, SacreBleuGame._instance.basicSquare, SacreBleuGame._instance.basicSquare);
             _button = new Button(buttonPosition, SacreBleuGame._instance.basicSquare);
 
@@ -51,9 +46,9 @@ namespace SacreBleu.Levels
             List<Obstacle> tempObstacles = new List<Obstacle>();
             List<Hazard> tempHazards = new List<Hazard>();
 
-            for(int x = 0; x < levelLayout.GetLength(1); x++)
+            for (int x = 0; x < levelLayout.GetLength(1); x++)
             {
-                for(int y = 0; y < levelLayout.GetLength(0); y++)
+                for (int y = 0; y < levelLayout.GetLength(0); y++)
                 {
                     //calculate tile position
                     Vector2 tilePosition = new Vector2(x * SacreBleuGame._instance._tileWidth, y * SacreBleuGame._instance._tileWidth);
@@ -61,18 +56,18 @@ namespace SacreBleu.Levels
                     //get the specified map component
                     int number = levelLayout[y, x];
 
-                    if(number == 0)
+                    if (number == 0)
                     {
                     }
-                    else if(number == 1)
+                    else if (number == 1)
                     {
                         tempObstacles.Add(new Obstacle(tilePosition, SacreBleuGame._instance.basicSquare));
                     }
-                    else if(number == 2)
+                    else if (number == 2)
                     {
                         tempHazards.Add(new Hazard(tilePosition, SacreBleuGame._instance.basicSquare));
                     }
-                    else if(number == 9)
+                    else if (number == 9)
                     {
                         _frog = new Frog(tilePosition, SacreBleuGame._instance.frogTexture, 0.015f, 0.5f);
                     }
@@ -90,7 +85,7 @@ namespace SacreBleu.Levels
 
             _powerBar.Update(gameTime);
             _button.Update(gameTime);
-			_directionGauge.Update(gameTime);
+            _directionGauge.Update(gameTime);
 
         }
 

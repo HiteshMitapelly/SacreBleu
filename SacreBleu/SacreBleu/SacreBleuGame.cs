@@ -51,10 +51,6 @@ namespace SacreBleu
             _screenHeight = _graphics.PreferredBackBufferHeight;
             _screenWidth = _graphics.PreferredBackBufferWidth;
 
-            //create managers
-            _gameManager = new GameManager();
-            _levelManager = new LevelManager();
-
             _camera = new Camera(GraphicsDevice.Viewport);
 
             base.Initialize();
@@ -72,6 +68,10 @@ namespace SacreBleu
 
             //load fonts
             _levelFont = Content.Load<SpriteFont>("Fonts/Bebas");
+
+            //create managers
+            _gameManager = new GameManager();
+            _levelManager = new LevelManager();
         }
 
         protected override void UnloadContent()
