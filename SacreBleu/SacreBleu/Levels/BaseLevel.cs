@@ -101,7 +101,7 @@ namespace SacreBleu.Levels
         //check for overlapping rectangles
         public GameObject RectangleOverlapping(Rectangle boundsToCheck)
         {
-            if (_goal._bounds.Intersects(boundsToCheck))
+            if (_goal != null && _goal._bounds.Intersects(boundsToCheck))
                 return _goal;
 
             foreach (Obstacle o in _obstacles)
@@ -162,7 +162,7 @@ namespace SacreBleu.Levels
                 {
                     RestartLevel();
                 }
-                else if (objectOverlapping._tag.Equals("Goal"))
+                else if (_goal != null && objectOverlapping._tag.Equals("Goal"))
                 {
                     if (_frog._velocity.Length() <= 0f)
                         LevelManager._instance.GoToNextLevel();
@@ -191,7 +191,8 @@ namespace SacreBleu.Levels
             foreach (Hazard h in _hazards)
                 h.Draw();
 
-            _goal.Draw();
+            if (_goal != null)
+                _goal.Draw();
             _directionGauge.Draw();
             _frog.Draw();
             //_button.Draw();

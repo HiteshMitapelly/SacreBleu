@@ -13,6 +13,8 @@ namespace SacreBleu.Managers
         private int levelIndex;
         public BaseLevel currentLevel;
 
+        private bool keyPressed;
+
         public LevelManager()
         {
             _instance = this;
@@ -21,7 +23,8 @@ namespace SacreBleu.Managers
             {
                 new LevelOne(),
                 new LevelTwo(),
-                new LevelThree()
+                new LevelThree(),
+                new LevelFour()
             };
 
             currentLevel = levels[levelIndex];
@@ -33,13 +36,20 @@ namespace SacreBleu.Managers
 
             KeyboardState kstate = Keyboard.GetState();
 
-            if (kstate.IsKeyDown(Keys.Left) && levelIndex > 0)
+            if (kstate.IsKeyDown(Keys.Left) && levelIndex > 0 && !keyPressed)
             {
+                keyPressed = true;
+
                 levelIndex--;
                 ChangeLevel(levels[levelIndex]);
             }
-            else if (kstate.IsKeyDown(Keys.Right))
+            else if (kstate.IsKeyDown(Keys.Right) && !keyPressed)
+            {
+                keyPressed = true;
                 GoToNextLevel();
+            }
+            else if (kstate.IsKeyUp(Keys.Left) && kstate.IsKeyUp(Keys.Right) && keyPressed)
+                keyPressed = false;
         }
 
         private void ChangeLevel(BaseLevel newLevel)

@@ -14,7 +14,7 @@ namespace SacreBleu.GameObjects
         public Button(Vector2 position, Texture2D sprite) : base(position, sprite)
         {
             _tag = "button";
-            _tint = Color.Red;
+            _tint = Color.Purple;
         }
 
         public void Update(GameTime gameTime)
