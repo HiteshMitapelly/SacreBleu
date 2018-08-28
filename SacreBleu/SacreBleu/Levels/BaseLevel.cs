@@ -32,7 +32,7 @@ namespace SacreBleu.Levels
 
             //setting positions
             _directionGauge = new DirectionGauge(directionGaugePosition, SacreBleuGame._instance.arrowTexture);
-            _powerBar = new PowerBar(powerBarPosition, SacreBleuGame._instance.basicSquare, SacreBleuGame._instance.basicSquare);
+            _powerBar = new PowerBar(powerBarPosition, SacreBleuGame._instance.powerBarTexture, SacreBleuGame._instance.basicSquare);
             _button = new Button(buttonPosition, SacreBleuGame._instance.basicSquare);
 
             //GenerateLevel(levelLayout);
@@ -78,7 +78,7 @@ namespace SacreBleu.Levels
                     else if (number == 9)
                     {
                         _frogStartingPosition = tilePosition;
-                        _frog = new Frog(_frogStartingPosition, SacreBleuGame._instance.frogTexture, 0.015f, 0.5f);
+                        _frog = new Frog(_frogStartingPosition, SacreBleuGame._instance.frogTexture, 0.015f, 0.75f);
                     }
                 }
             }
@@ -101,17 +101,17 @@ namespace SacreBleu.Levels
         //check for overlapping rectangles
         public GameObject RectangleOverlapping(Rectangle boundsToCheck)
         {
-            if (_goal != null && _goal._bounds.Intersects(boundsToCheck))
+            if (_goal != null && _goal.GetBounds().Intersects(boundsToCheck))
                 return _goal;
 
             foreach (Obstacle o in _obstacles)
             {
-                if (o._bounds.Intersects(boundsToCheck))
+                if (o.GetBounds().Intersects(boundsToCheck))
                     return o;
             }
             foreach (Hazard h in _hazards)
             {
-                if (h._bounds.Intersects(boundsToCheck))
+                if (h.GetBounds().Intersects(boundsToCheck))
                     return h;
             }
 
@@ -178,8 +178,7 @@ namespace SacreBleu.Levels
 
         private void RestartLevel()
         {
-            _frog._velocity = Vector2.Zero;
-            _frog._position = _frogStartingPosition;
+            _frog.Death(_frogStartingPosition);
             _directionGauge._angle = 0f;
         }
 
@@ -193,8 +192,13 @@ namespace SacreBleu.Levels
 
             if (_goal != null)
                 _goal.Draw();
-            _directionGauge.Draw();
+            if (_frog._currentState == Frog.States.IDLE)
+            {
+                _directionGauge.Draw();
+            }
+
             _frog.Draw();
+
             //_button.Draw();
             //_powerBar.Draw();
         }

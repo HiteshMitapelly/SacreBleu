@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SacreBleu.Managers;
 using System;
+using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
 
 namespace SacreBleu.GameObjects
 {
@@ -10,6 +11,7 @@ namespace SacreBleu.GameObjects
     {
         Vector2 initBottomPosition;
         KeyboardState keyboardState, previousKeyboardState;
+        private MouseState mouseState;
 
         public float _angle;
         float maxAngle;
@@ -20,14 +22,18 @@ namespace SacreBleu.GameObjects
         {
             _angle = 0f;
 
-            maxAngle = (float)Math.PI * 0.99f;
+            maxAngle = (float)Math.PI * 0.975f;
             angleChange = 0.015f;
             initBottomPosition = new Vector2(_bounds.X, _bounds.Y + _bounds.Height);
         }
 
         public void Update(GameTime gameTime)
         {
+            if (LevelManager._instance.currentLevel._frog._currentState != Frog.States.IDLE)
+                return;
+
             keyboardState = Keyboard.GetState();
+            mouseState = Mouse.GetState();
 
             if (keyboardState.IsKeyDown(Keys.D) && !previousKeyboardState.IsKeyDown(Keys.Right))
             {
@@ -50,9 +56,9 @@ namespace SacreBleu.GameObjects
                 }
             }
 
-            if (keyboardState.IsKeyDown(Keys.LeftShift))
+            if (mouseState.RightButton == ButtonState.Pressed && !doubleSpeed)
                 doubleSpeed = true;
-            else if (keyboardState.IsKeyUp(Keys.LeftShift))
+            else if (mouseState.RightButton != ButtonState.Pressed && doubleSpeed)
                 doubleSpeed = false;
 
             previousKeyboardState = keyboardState;

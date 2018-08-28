@@ -19,6 +19,10 @@ namespace SacreBleu.GameObjects
 
         //collision properties
         public Rectangle _bounds;
+        public int _boundsOriginX;
+        public int _boundsOriginY;
+        public int _boundsWidth;
+        public int _boundsHeight;
         public bool _isTrigger;
 
         public GameObject(Vector2 position, Texture2D sprite)
@@ -29,16 +33,17 @@ namespace SacreBleu.GameObjects
             _sprite = sprite;
             _tint = Color.White;
             _scale = 1f;
-            _bounds = new Rectangle((int)_position.X, (int)_position.Y, _sprite.Width, _sprite.Height);
+            _boundsOriginX = 0;
+            _boundsOriginY = 0;
+            _boundsWidth = _sprite.Width;
+            _boundsHeight = _sprite.Height;
             _isTrigger = false;
         }
 
         public Rectangle GetBounds()
         {
-            return new Rectangle((int)_position.X, (int)_position.Y, _sprite.Width, _sprite.Height);
+            return new Rectangle((int)_position.X + _boundsOriginX, (int)_position.Y + _boundsOriginY, _boundsWidth, _boundsHeight);
         }
-
-        public virtual void RegisterTriggerCollision(GameObject collisionObject) { }
 
         public virtual void Draw()
         {

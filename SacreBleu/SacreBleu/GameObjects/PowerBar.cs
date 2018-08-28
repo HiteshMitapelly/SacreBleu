@@ -76,8 +76,8 @@ namespace SacreBleu.GameObjects
         }
         public override void Draw()
         {
-            SacreBleuGame._instance._spriteBatch.Draw(powerGaugeTexture, _position, new Rectangle((int)_position.X, (int)_position.Y, _sprite.Width, _sprite.Height), Color.White);
-            SacreBleuGame._instance._spriteBatch.Draw(powerBarTexture, _position, new Rectangle((int)_position.X, (int)_position.Y, _sprite.Width, (int)powerBarHeight), Color.Black);
+            SacreBleuGame._instance._spriteBatch.Draw(powerGaugeTexture, new Vector2(_position.X, _position.Y - _sprite.Height / 2), new Rectangle((int)_position.X, (int)_position.Y, _sprite.Width, _sprite.Height), Color.White);
+            SacreBleuGame._instance._spriteBatch.Draw(powerBarTexture, new Vector2(_position.X, _position.Y - _sprite.Height / 2), new Rectangle((int)_position.X, (int)_position.Y, _sprite.Width, (int)powerBarHeight), Color.DarkBlue);
         }
 
     }

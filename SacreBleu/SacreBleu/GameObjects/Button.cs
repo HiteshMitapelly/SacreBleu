@@ -19,6 +19,9 @@ namespace SacreBleu.GameObjects
 
         public void Update(GameTime gameTime)
         {
+            if (LevelManager._instance.currentLevel._frog._currentState != Frog.States.IDLE)
+                return;
+
             mousePosition = new Vector2(mouseState.X, mouseState.Y);
 
             mouseState = Mouse.GetState();
@@ -42,10 +45,6 @@ namespace SacreBleu.GameObjects
             }
 
             oldMouseState = mouseState;
-        }
-        public override void Draw()
-        {
-            base.Draw();
         }
     }
 }

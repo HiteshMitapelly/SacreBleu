@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SacreBleu.GameObjects;
 using SacreBleu.Managers;
 
 namespace SacreBleu
@@ -15,7 +16,6 @@ namespace SacreBleu
         public GraphicsDeviceManager _graphics;
         public SpriteBatch _spriteBatch;
         public int _tileWidth = 32;
-        public float _scaleMultiplier = 0.0625f;
 
         //managers
         GameManager _gameManager;
@@ -30,6 +30,7 @@ namespace SacreBleu
         public Texture2D basicSquare;
         public Texture2D goalTexture;
         public Texture2D fireTexture;
+        public Texture2D powerBarTexture;
 
         //misc content
         public SpriteFont _levelFont;
@@ -69,6 +70,7 @@ namespace SacreBleu
             arrowTexture = Content.Load<Texture2D>("Sprites/texture");
             goalTexture = Content.Load<Texture2D>("Sprites/Props/temp_goal");
             fireTexture = Content.Load<Texture2D>("Sprites/Props/temp_hazard");
+            powerBarTexture = Content.Load<Texture2D>("Sprites/UI/PowerBar");
 
             //load fonts
             _levelFont = Content.Load<SpriteFont>("Fonts/Bebas");
@@ -108,10 +110,12 @@ namespace SacreBleu
 
             //Drawing UI sprites
             _spriteBatch.Begin();
-            LevelManager._instance.currentLevel._powerBar.Draw();
-            LevelManager._instance.currentLevel._button.Draw();
+            if (LevelManager._instance.currentLevel._frog._currentState == Frog.States.IDLE)
+            {
+                LevelManager._instance.currentLevel._powerBar.Draw();
+                LevelManager._instance.currentLevel._button.Draw();
+            }
             _spriteBatch.End();
-
         }
     }
 }
