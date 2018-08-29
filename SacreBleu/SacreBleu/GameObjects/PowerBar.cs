@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using SacreBleu.Managers;
 using System;
+using System.Diagnostics;
 
 namespace SacreBleu.GameObjects
 {
@@ -70,7 +71,11 @@ namespace SacreBleu.GameObjects
             direction.Normalize();
 
             LevelManager._instance.currentLevel._frog.SetVelocity(powerMagnitude * direction * LevelManager._instance.currentLevel._frog._maxVelocity);
-
+            if (powerMagnitude != 0)
+            {
+                LevelManager._instance.currentLevel._frog.numberOfHits++;
+               
+            }
             powerMagnitude = 0f;
             powerBarHeight = _sprite.Height;
         }

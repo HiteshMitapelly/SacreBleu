@@ -199,8 +199,7 @@ namespace SacreBleu.Levels
 
             _frog.Draw();
 
-            //_button.Draw();
-            //_powerBar.Draw();
+            
         }
     }
 }

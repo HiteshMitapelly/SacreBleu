@@ -18,15 +18,17 @@ namespace SacreBleu.GameObjects
         public States _currentState;
 
         MouseState mouseState;
-        Vector2 _mouseInitPosition, _mouseFinalPosition;
+        Vector2 _mouseInitPosition, _mouseFinalPosition, _mousePosition;
         Vector2 worldPosition;
 
-        public float _maxVelocity = 15f;
+        public int numberOfHits;
+        public float _maxVelocity = 25f;
         bool dragging;
         MouseState oldMouseState;
         Rectangle _line;
         Vector2 _lineVector;
         float angle;
+        
 
         bool inRange;
 
@@ -41,6 +43,7 @@ namespace SacreBleu.GameObjects
             _boundsOriginY = 2;
             _boundsWidth = _sprite.Width - 2;
             _boundsHeight = _sprite.Height - 2;
+            numberOfHits = 0;
 
             _currentState = States.IDLE;
         }
@@ -52,9 +55,9 @@ namespace SacreBleu.GameObjects
             else if (_velocity.Length() == 0f && _currentState == States.TRAVELLING)
                 _currentState = States.IDLE;
 
-            Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
+             _mousePosition = new Vector2(mouseState.X, mouseState.Y);
 
-            worldPosition = Vector2.Transform(mousePosition, Matrix.Invert(SacreBleuGame._instance._camera.Transform));
+            worldPosition = Vector2.Transform(_mousePosition, Matrix.Invert(SacreBleuGame._instance._camera.Transform));
 
             mouseState = Mouse.GetState();
             inRange = GetBounds().Contains(new Point((int)worldPosition.X, (int)worldPosition.Y));
@@ -70,19 +73,19 @@ namespace SacreBleu.GameObjects
 
             if (((mouseState.LeftButton == ButtonState.Pressed) && (oldMouseState.LeftButton == ButtonState.Pressed)) && dragging) // in dragging state condition
             {
-                Vector2 end = new Vector2(worldPosition.X, worldPosition.Y);
-                DragLine(_mouseInitPosition, end, Color.White, 1);
+                 _mouseFinalPosition = new Vector2(worldPosition.X, worldPosition.Y);
+                DragLine(_mouseInitPosition, _mouseFinalPosition, Color.White, 1);
             }
 
             if (((mouseState.LeftButton == ButtonState.Released) && (oldMouseState.LeftButton == ButtonState.Pressed)) && dragging)  // dragged and released condition
             {
-                Vector2 velocity = Vector2.Zero;
+                 _velocity = Vector2.Zero;
 
                 dragging = false;
                 _mouseFinalPosition = new Vector2(worldPosition.X, worldPosition.Y);
-                velocity = new Vector2(_mouseFinalPosition.X - _mouseInitPosition.X, _mouseFinalPosition.Y - _mouseInitPosition.Y);
+                _velocity = new Vector2(_mouseFinalPosition.X - _mouseInitPosition.X, _mouseFinalPosition.Y - _mouseInitPosition.Y);
 
-                SetVelocity(-velocity * 0.25f);
+                SetVelocity(-_velocity * 0.25f);
                 GameManager._instance._currentState = GameManager.GameStates.RELEASED;
             }
 
