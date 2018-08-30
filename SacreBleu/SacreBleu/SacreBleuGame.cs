@@ -87,12 +87,19 @@ namespace SacreBleu
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 Exit();
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+
+                GameManager._instance._currentState = GameManager.GameStates.PAUSED;
+
+            }
 
             // TODO: Add your update logic here
             _levelManager.Update(gameTime);
-            _camera.Update(_levelManager.currentLevel._frog._position);
+            if (GameManager._instance._currentState != GameManager.GameStates.IDLE)
+                _camera.Update(_levelManager.currentLevel._frog._position);
 
             base.Update(gameTime);
         }
@@ -101,21 +108,67 @@ namespace SacreBleu
         {
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here						
-            _spriteBatch.Begin(transformMatrix: _camera.Transform);
-            _levelManager.currentLevel.Draw();
-            base.Draw(gameTime);
-            _spriteBatch.End();
-
-            //Drawing UI sprites
-            _spriteBatch.Begin();
-            if (LevelManager._instance.currentLevel._frog._currentState == Frog.States.IDLE)
+            if (GameManager._instance._currentState == GameManager.GameStates.READY)
             {
-                LevelManager._instance.currentLevel._powerBar.Draw();
-                LevelManager._instance.currentLevel._button.Draw();
+                // TODO: Add your drawing code here						
+                _spriteBatch.Begin(transformMatrix: _camera.Transform);
+                _levelManager.currentLevel.Draw();
+                base.Draw(gameTime);
+                _spriteBatch.End();
+
+                //Drawing UI sprites
+                _spriteBatch.Begin();
+
+                if (LevelManager._instance.currentLevel._frog._currentState == Frog.States.IDLE)
+                {
+                    LevelManager._instance.currentLevel._powerBar.Draw();
+                    LevelManager._instance.currentLevel._hitbutton.Draw();
+                }
+
+                _spriteBatch.DrawString(SacreBleuGame._instance._levelFont, "Hit Counter : " + LevelManager._instance.currentLevel.numberOfHits.ToString(), LevelManager._instance.currentLevel.counterPosition, Color.Black);
+                _spriteBatch.End();
             }
-            _spriteBatch.End();
+            if (GameManager._instance._currentState == GameManager.GameStates.PAUSED)
+            {
+                _spriteBatch.Begin();
+
+                _spriteBatch.Draw(LevelManager._instance.currentLevel.pauseMenuContinueButton._sprite, LevelManager._instance.currentLevel.pauseMenuContinueButton._position, Color.Orange);
+                _spriteBatch.DrawString(SacreBleuGame._instance._levelFont, "Continue", LevelManager._instance.currentLevel.pauseMenuContinueButton._position, Color.Black);
+
+                _spriteBatch.Draw(LevelManager._instance.currentLevel.pauseMenuRestartButton._sprite, LevelManager._instance.currentLevel.pauseMenuRestartButton._position, Color.Green);
+                _spriteBatch.DrawString(SacreBleuGame._instance._levelFont, "Restart", LevelManager._instance.currentLevel.pauseMenuRestartButton._position, Color.Black);
+
+                _spriteBatch.Draw(LevelManager._instance.currentLevel.quitButton._sprite, LevelManager._instance.currentLevel.quitButton._position, Color.Red);
+                _spriteBatch.DrawString(SacreBleuGame._instance._levelFont, "Quit", LevelManager._instance.currentLevel.quitButton._position, Color.Black);
+
+
+                _spriteBatch.End();
+
+            }
+            if (GameManager._instance._currentState == GameManager.GameStates.WON)
+            {
+                _spriteBatch.Begin();
+                _spriteBatch.DrawString(SacreBleuGame._instance._levelFont, "YOU WON", new Vector2(_screenWidth / 2, _screenHeight / 2 - 400f), Color.Yellow);
+
+                _spriteBatch.Draw(LevelManager._instance.currentLevel.wonScreenNextLevelButton._sprite, LevelManager._instance.currentLevel.wonScreenNextLevelButton._position, Color.Orange);
+                _spriteBatch.DrawString(SacreBleuGame._instance._levelFont, "Next Level", LevelManager._instance.currentLevel.pauseMenuContinueButton._position, Color.Black);
+
+                _spriteBatch.Draw(LevelManager._instance.currentLevel.wonScreenRetryLevelButton._sprite, LevelManager._instance.currentLevel.wonScreenRetryLevelButton._position, Color.Green);
+                _spriteBatch.DrawString(SacreBleuGame._instance._levelFont, "Retry Level", LevelManager._instance.currentLevel.pauseMenuRestartButton._position, Color.Black);
+
+                _spriteBatch.Draw(LevelManager._instance.currentLevel.quitButton._sprite, LevelManager._instance.currentLevel.quitButton._position, Color.Red);
+                _spriteBatch.DrawString(SacreBleuGame._instance._levelFont, "Quit", LevelManager._instance.currentLevel.quitButton._position, Color.Black);
+
+
+                _spriteBatch.End();
+
+            }
+            if (GameManager._instance._currentState == GameManager.GameStates.IDLE)
+            {
+                _spriteBatch.Begin();
+                LevelManager._instance.titleScreen.Draw();
+                _spriteBatch.End();
+            }
         }
     }
 }

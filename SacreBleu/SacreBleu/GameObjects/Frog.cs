@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SacreBleu.Managers;
+
 using System;
 
 namespace SacreBleu.GameObjects
@@ -21,7 +21,7 @@ namespace SacreBleu.GameObjects
         Vector2 _mouseInitPosition, _mouseFinalPosition, _mousePosition;
         Vector2 worldPosition;
 
-        public int numberOfHits;
+        
         public float _maxVelocity = 25f;
         bool dragging;
         MouseState oldMouseState;
@@ -43,7 +43,7 @@ namespace SacreBleu.GameObjects
             _boundsOriginY = 2;
             _boundsWidth = _sprite.Width - 2;
             _boundsHeight = _sprite.Height - 2;
-            numberOfHits = 0;
+           
 
             _currentState = States.IDLE;
         }
@@ -86,7 +86,7 @@ namespace SacreBleu.GameObjects
                 _velocity = new Vector2(_mouseFinalPosition.X - _mouseInitPosition.X, _mouseFinalPosition.Y - _mouseInitPosition.Y);
 
                 SetVelocity(-_velocity * 0.25f);
-                GameManager._instance._currentState = GameManager.GameStates.RELEASED;
+               // GameManager._instance._currentState = GameManager.GameStates.READY;
             }
 
             oldMouseState = mouseState;

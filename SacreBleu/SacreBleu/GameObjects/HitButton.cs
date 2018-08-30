@@ -5,19 +5,19 @@ using SacreBleu.Managers;
 
 namespace SacreBleu.GameObjects
 {
-    class Button : GameObject
+    class HitButton : ButtonGameObject
     {
         MouseState mouseState, oldMouseState;
         bool inRange;
         Vector2 mousePosition;
 
-        public Button(Vector2 position, Texture2D sprite) : base(position, sprite)
+        public HitButton(Vector2 position, Texture2D sprite,string tag) : base(position, sprite,tag)
         {
-            _tag = "button";
+            
             _tint = Color.Purple;
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             if (LevelManager._instance.currentLevel._frog._currentState != Frog.States.IDLE)
                 return;
@@ -45,6 +45,11 @@ namespace SacreBleu.GameObjects
             }
 
             oldMouseState = mouseState;
+        }
+
+        public override void Draw()
+        {
+            base.Draw();
         }
     }
 }

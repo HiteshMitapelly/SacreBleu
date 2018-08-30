@@ -4,14 +4,14 @@
     {
         public static GameManager _instance;
 
-        public enum GameStates { PAUSED, READY, RELEASED }
+        public enum GameStates { IDLE,PAUSED,READY, WON }
         public GameStates _currentState;
 
         public GameManager()
         {
             _instance = this;
 
-            _currentState = GameStates.READY;
+            _currentState = GameStates.IDLE;
         }
     }
 }

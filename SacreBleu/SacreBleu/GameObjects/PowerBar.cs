@@ -8,12 +8,14 @@ namespace SacreBleu.GameObjects
 {
     class PowerBar : GameObject
     {
+        public bool startBar;
+
         Vector2 direction;
         Texture2D powerBarTexture, powerGaugeTexture;
         float powerBarHeight;
         float powerMagnitude;
         int heightFactor;
-        public bool startBar;
+        float minPower;
 
         public PowerBar(Vector2 position, Texture2D healthBar, Texture2D healthGauge) : base(position, healthBar)
         {
@@ -23,6 +25,7 @@ namespace SacreBleu.GameObjects
             heightFactor = -1;
             _tag = "power bar";
             startBar = false;
+            minPower = 0.01f;
         }
 
         public void Update(GameTime gameTime)
@@ -69,11 +72,13 @@ namespace SacreBleu.GameObjects
             }
 
             direction.Normalize();
+            if (powerMagnitude == 0f)
+                powerMagnitude = minPower;
 
             LevelManager._instance.currentLevel._frog.SetVelocity(powerMagnitude * direction * LevelManager._instance.currentLevel._frog._maxVelocity);
             if (powerMagnitude != 0)
             {
-                LevelManager._instance.currentLevel._frog.numberOfHits++;
+                LevelManager._instance.currentLevel.numberOfHits++;
                
             }
             powerMagnitude = 0f;
