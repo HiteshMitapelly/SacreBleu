@@ -12,13 +12,14 @@ namespace SacreBleu.Managers
         public List<BaseLevel> levels;
         private int levelIndex;
         public BaseLevel currentLevel;
+        public TitleScreen titleScreen;
 
         private bool keyPressed;
 
         public LevelManager()
         {
             _instance = this;
-
+            titleScreen = new TitleScreen();
             levels = new List<BaseLevel>
             {
                 new LevelOne(),
@@ -27,11 +28,13 @@ namespace SacreBleu.Managers
                 new LevelFour()
             };
 
-            currentLevel = levels[levelIndex];
+            currentLevel = titleScreen;
         }
 
         public void Update(GameTime gameTime)
         {
+            if (GameManager._instance._currentState == GameManager.GameStates.IDLE)
+                titleScreen.Update(gameTime);
             currentLevel.Update(gameTime);
 
             KeyboardState kstate = Keyboard.GetState();
@@ -52,9 +55,15 @@ namespace SacreBleu.Managers
                 keyPressed = false;
         }
 
+
         private void ChangeLevel(BaseLevel newLevel)
         {
             currentLevel = newLevel;
+        }
+
+        public void GoToFirstLevel() {
+            ChangeLevel(levels[levelIndex]);
+
         }
 
         public void GoToNextLevel()
