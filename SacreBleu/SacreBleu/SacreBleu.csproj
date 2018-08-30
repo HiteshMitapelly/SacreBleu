@@ -50,15 +50,9 @@
     <Compile Include="GameObjects\PowerBar.cs" />
     <Compile Include="GameObjects\Frog.cs" />
     <Compile Include="GameObjects\MoveableGameObject.cs" />
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 0bd61c3182cc72d3f03bf1d9050634b7582d8a05
     <Compile Include="Levels\TitleScreen.cs" />
     <Compile Include="Levels\LevelFour.cs" />
-=======
     <Compile Include="Levels\LevelSandbox.cs" />
->>>>>>> 49f8bb5ffefa43c31fa665682491082d21afec60
     <Compile Include="Levels\LevelThree.cs" />
     <Compile Include="Managers\GameManager.cs" />
     <Compile Include="Managers\LevelManager.cs" />
