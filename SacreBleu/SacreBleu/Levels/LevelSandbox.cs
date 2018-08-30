@@ -1,6 +1,6 @@
 ﻿namespace SacreBleu.Levels
 {
-    class LevelFour : BaseLevel
+    class LevelSandbox : BaseLevel
     {
         public int[,] layout = {
             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
@@ -26,7 +26,7 @@
             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
         };
 
-        public LevelFour() : base()
+        public LevelSandbox() : base()
         {
             GenerateLevel(layout);
         }

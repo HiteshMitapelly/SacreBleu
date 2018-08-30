@@ -49,7 +49,7 @@
     <Compile Include="GameObjects\PowerBar.cs" />
     <Compile Include="GameObjects\Frog.cs" />
     <Compile Include="GameObjects\MoveableGameObject.cs" />
-    <Compile Include="Levels\LevelFour.cs" />
+    <Compile Include="Levels\LevelSandbox.cs" />
     <Compile Include="Levels\LevelThree.cs" />
     <Compile Include="Managers\GameManager.cs" />
     <Compile Include="Managers\LevelManager.cs" />

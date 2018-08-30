@@ -24,7 +24,7 @@ namespace SacreBleu.Managers
                 new LevelOne(),
                 new LevelTwo(),
                 new LevelThree(),
-                new LevelFour()
+                new LevelSandbox()
             };
 
             currentLevel = levels[levelIndex];
