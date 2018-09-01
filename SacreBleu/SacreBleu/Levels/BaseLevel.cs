@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Input;
 using SacreBleu.GameObjects;
 using SacreBleu.Managers;
 using System.Collections.Generic;
+using System.IO;
 
 
 namespace SacreBleu.Levels
@@ -17,19 +18,20 @@ namespace SacreBleu.Levels
         public PowerBar _powerBar;
         public HitButton _hitbutton;
         public DirectionGauge _directionGauge;
-        public ButtonGameObject pauseMenuContinueButton, pauseMenuRestartButton, quitButton,wonScreenNextLevelButton,wonScreenRetryLevelButton;
+        public ButtonGameObject pauseMenuContinueButton, pauseMenuRestartButton, quitButton, wonScreenNextLevelButton, wonScreenRetryLevelButton;
+
         //references to all the game objects in any given level
-        public int[,] levelLayout;
         public Frog _frog;
-        private Vector2 _frogStartingPosition;
+        public Vector2 _frogStartingPosition;
         public Goal _goal;
-        public Obstacle[] _obstacles;
-        public Hazard[] _hazards;
+        public List<GameObject> entities;
 
         //UI positions
-        public Vector2 counterPosition,pauseMenuContinuePosition,pauseMenuRestartPosition,quitPosition,wonScreenNextLevelPosition,wonScreenRetryLevelPosition;
-        
+        public Vector2 counterPosition, pauseMenuContinuePosition, pauseMenuRestartPosition, quitPosition, wonScreenNextLevelPosition, wonScreenRetryLevelPosition;
+
         Vector2 directionGaugePosition, powerBarPosition, buttonPosition;
+
+        public int rowCount;
 
         public BaseLevel()
         {
@@ -37,9 +39,9 @@ namespace SacreBleu.Levels
             directionGaugePosition = new Vector2(125f, SacreBleuGame._instance._screenHeight - 50f);
             powerBarPosition = new Vector2(SacreBleuGame._instance._screenWidth - 75f, SacreBleuGame._instance._screenHeight - 75f);
             buttonPosition = new Vector2(SacreBleuGame._instance._screenWidth - 150f, SacreBleuGame._instance._screenHeight - 75f);
-            counterPosition = new Vector2(75f, SacreBleuGame._instance._screenHeight/2 - (0.90f * SacreBleuGame._instance._screenHeight / 2));
+            counterPosition = new Vector2(75f, SacreBleuGame._instance._screenHeight / 2 - (0.90f * SacreBleuGame._instance._screenHeight / 2));
             pauseMenuContinuePosition = new Vector2(SacreBleuGame._instance._screenWidth / 2, SacreBleuGame._instance._screenHeight / 2 - 50f);
-            pauseMenuRestartPosition = new Vector2(SacreBleuGame._instance._screenWidth / 2, SacreBleuGame._instance._screenHeight / 2 );
+            pauseMenuRestartPosition = new Vector2(SacreBleuGame._instance._screenWidth / 2, SacreBleuGame._instance._screenHeight / 2);
             quitPosition = new Vector2(SacreBleuGame._instance._screenWidth / 2, SacreBleuGame._instance._screenHeight / 2 + 50f);
             wonScreenNextLevelPosition = new Vector2(SacreBleuGame._instance._screenWidth / 2, SacreBleuGame._instance._screenHeight / 2 - 50f);
             wonScreenRetryLevelPosition = new Vector2(SacreBleuGame._instance._screenWidth / 2, SacreBleuGame._instance._screenHeight / 2);
@@ -47,7 +49,7 @@ namespace SacreBleu.Levels
             //setting positions
             _directionGauge = new DirectionGauge(directionGaugePosition, SacreBleuGame._instance.arrowTexture);
             _powerBar = new PowerBar(powerBarPosition, SacreBleuGame._instance.powerBarTexture, SacreBleuGame._instance.basicSquare);
-            _hitbutton = new HitButton(buttonPosition, SacreBleuGame._instance.basicSquare,"hitButton");
+            _hitbutton = new HitButton(buttonPosition, SacreBleuGame._instance.basicSquare, "hitButton");
             pauseMenuContinueButton = new ButtonGameObject(pauseMenuContinuePosition, SacreBleuGame._instance.basicSquare, "continueButton");
             pauseMenuRestartButton = new ButtonGameObject(pauseMenuRestartPosition, SacreBleuGame._instance.basicSquare, "restartButton");
             quitButton = new ButtonGameObject(quitPosition, SacreBleuGame._instance.basicSquare, "quitButton");
@@ -58,55 +60,62 @@ namespace SacreBleu.Levels
 
             numberOfHits = 0;
             par = 0;
-    }
 
-        protected void GenerateLevel(int[,] layout)
+            entities = new List<GameObject>();
+        }
+
+        protected void CreateLevelLayout(string filePath)
         {
-            levelLayout = layout;
-
-            //0 for background tile
-            //1 for obstacle
-            //2 for hazard
-            //6 for goal
-            //9 for frog
-            List<Obstacle> tempObstacles = new List<Obstacle>();
-            List<Hazard> tempHazards = new List<Hazard>();
-
-            for (int x = 0; x < levelLayout.GetLength(1); x++)
+            List<List<int>> layout = new List<List<int>>();
+            using (StreamReader reader = File.OpenText(filePath))
             {
-                for (int y = 0; y < levelLayout.GetLength(0); y++)
+                string currentLine;
+                while ((currentLine = reader.ReadLine()) != null)
                 {
-                    //calculate tile position
-                    Vector2 tilePosition = new Vector2(x * SacreBleuGame._instance._tileWidth, y * SacreBleuGame._instance._tileWidth);
+                    List<int> currentRow = new List<int>();
+                    string[] columns = currentLine.Split(',');
+                    foreach (string cell in columns)
+                    {
+                        int tile = int.Parse(cell.Trim());
+                        currentRow.Add(tile);
+                    }
 
-                    //get the specified map component
-                    int number = levelLayout[y, x];
-
-                    if (number == 0)
-                    {
-                    }
-                    else if (number == 1)
-                    {
-                        tempObstacles.Add(new Obstacle(tilePosition, SacreBleuGame._instance.basicSquare));
-                    }
-                    else if (number == 2)
-                    {
-                        tempHazards.Add(new Hazard(tilePosition, SacreBleuGame._instance.fireTexture));
-                    }
-                    else if (number == 6)
-                    {
-                        _goal = new Goal(tilePosition, SacreBleuGame._instance.goalTexture);
-                    }
-                    else if (number == 9)
-                    {
-                        _frogStartingPosition = tilePosition;
-                        _frog = new Frog(_frogStartingPosition, SacreBleuGame._instance.frogTexture, 0.015f, 0.75f);
-                    }
+                    layout.Add(currentRow);
                 }
             }
 
-            _obstacles = tempObstacles.ToArray();
-            _hazards = tempHazards.ToArray();
+            GenerateLevel(layout);
+        }
+
+        protected void GenerateLevel(List<List<int>> layout)
+        {
+            //1 for background tile
+            //2 for boundary
+            //3 for cutting board
+            //4 for goal
+            //5 for burner
+            rowCount = layout.Count;
+            for (int i = 0; i < layout.Count; i++)
+            {
+                List<int> currentRow = layout[i];
+                for (int j = 0; j < currentRow.Count; j++)
+                {
+                    Vector2 tilePosition = new Vector2(j * SacreBleuGame._instance._tileWidth, i * SacreBleuGame._instance._tileWidth);
+
+                    entities.Add(TileManager.Instance.CreateTile(currentRow[j], tilePosition));
+                }
+            }
+
+            foreach (GameObject g in entities)
+            {
+                if (g != null && g._tag.Equals("Cutting Board"))
+                {
+                    _frogStartingPosition = g._position;
+                    _frog = new Frog(g._position, SacreBleuGame._instance.frogTexture, 0.015f, 0.75f);
+                }
+                else if (g != null && g._tag.Equals("Goal"))
+                    _goal = (Goal)g;
+            }
         }
 
         //update game objects and camera
@@ -134,11 +143,11 @@ namespace SacreBleu.Levels
             {
                 if (pauseMenuContinueButton.CurrentButtonState() == ButtonState.Pressed)
                 {
-                   GameManager._instance._currentState = GameManager.GameStates.READY;
+                    GameManager._instance._currentState = GameManager.GameStates.READY;
                 }
                 if (pauseMenuRestartButton.CurrentButtonState() == ButtonState.Pressed)
                 {
-                    
+
                     GameManager._instance._currentState = GameManager.GameStates.READY;
                     numberOfHits = 0;
                     RestartLevel();
@@ -178,15 +187,13 @@ namespace SacreBleu.Levels
             if (_goal != null && _goal.GetBounds().Intersects(boundsToCheck))
                 return _goal;
 
-            foreach (Obstacle o in _obstacles)
+            foreach (GameObject g in entities)
             {
-                if (o.GetBounds().Intersects(boundsToCheck))
-                    return o;
-            }
-            foreach (Hazard h in _hazards)
-            {
-                if (h.GetBounds().Intersects(boundsToCheck))
-                    return h;
+                if (g != null && (g._tag.Equals("Obstacle") || g._tag.Equals("Hazard")))
+                {
+                    if (g.GetBounds().Intersects(boundsToCheck))
+                        return g;
+                }
             }
 
             return null;
@@ -241,7 +248,6 @@ namespace SacreBleu.Levels
                     if (_frog._velocity.Length() <= 0f)
                     {
                         GameManager._instance._currentState = GameManager.GameStates.WON;
-                        //LevelManager._instance.GoToNextLevel();
                     }
                 }
             }
@@ -264,28 +270,19 @@ namespace SacreBleu.Levels
         {
             if (GameManager._instance._currentState == GameManager.GameStates.READY)
             {
-                foreach (Obstacle o in _obstacles)
-                    o.Draw();
-                foreach (Hazard h in _hazards)
-                    h.Draw();
+                foreach (GameObject g in entities)
+                {
+                    if (g != null)
+                        g.Draw();
+                }
 
-                if (_goal != null)
-                    _goal.Draw();
                 if (_frog._currentState == Frog.States.IDLE)
                 {
                     _directionGauge.Draw();
-
                 }
 
                 _frog.Draw();
-
             }
-            if (GameManager._instance._currentState == GameManager.GameStates.IDLE)
-            {
-                     
-            }
-
-
         }
     }
 }

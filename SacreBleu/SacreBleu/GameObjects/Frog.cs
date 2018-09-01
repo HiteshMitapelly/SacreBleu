@@ -21,20 +21,21 @@ namespace SacreBleu.GameObjects
         Vector2 _mouseInitPosition, _mouseFinalPosition, _mousePosition;
         Vector2 worldPosition;
 
-        
+
         public float _maxVelocity = 25f;
         bool dragging;
         MouseState oldMouseState;
         Rectangle _line;
         Vector2 _lineVector;
         float angle;
-        
+
 
         bool inRange;
 
         public Frog(Vector2 position, Texture2D sprite, float drag, float bounce) : base(position, sprite, drag, bounce)
         {
             _tag = "Frog";
+            _isTrigger = false;
 
             _mouseInitPosition = _position;
             dragging = false;
@@ -43,7 +44,8 @@ namespace SacreBleu.GameObjects
             _boundsOriginY = 2;
             _boundsWidth = _sprite.Width - 2;
             _boundsHeight = _sprite.Height - 2;
-           
+
+            _scale *= 2;
 
             _currentState = States.IDLE;
         }
@@ -55,7 +57,7 @@ namespace SacreBleu.GameObjects
             else if (_velocity.Length() == 0f && _currentState == States.TRAVELLING)
                 _currentState = States.IDLE;
 
-             _mousePosition = new Vector2(mouseState.X, mouseState.Y);
+            _mousePosition = new Vector2(mouseState.X, mouseState.Y);
 
             worldPosition = Vector2.Transform(_mousePosition, Matrix.Invert(SacreBleuGame._instance._camera.Transform));
 
@@ -73,20 +75,20 @@ namespace SacreBleu.GameObjects
 
             if (((mouseState.LeftButton == ButtonState.Pressed) && (oldMouseState.LeftButton == ButtonState.Pressed)) && dragging) // in dragging state condition
             {
-                 _mouseFinalPosition = new Vector2(worldPosition.X, worldPosition.Y);
+                _mouseFinalPosition = new Vector2(worldPosition.X, worldPosition.Y);
                 DragLine(_mouseInitPosition, _mouseFinalPosition, Color.White, 1);
             }
 
             if (((mouseState.LeftButton == ButtonState.Released) && (oldMouseState.LeftButton == ButtonState.Pressed)) && dragging)  // dragged and released condition
             {
-                 _velocity = Vector2.Zero;
+                _velocity = Vector2.Zero;
 
                 dragging = false;
                 _mouseFinalPosition = new Vector2(worldPosition.X, worldPosition.Y);
                 _velocity = new Vector2(_mouseFinalPosition.X - _mouseInitPosition.X, _mouseFinalPosition.Y - _mouseInitPosition.Y);
 
                 SetVelocity(-_velocity * 0.25f);
-               // GameManager._instance._currentState = GameManager.GameStates.READY;
+                // GameManager._instance._currentState = GameManager.GameStates.READY;
             }
 
             oldMouseState = mouseState;

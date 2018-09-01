@@ -35,49 +35,49 @@ namespace SacreBleu
                 isViewingMap = true;
                 if (keyboardState.IsKeyDown(Keys.W))
                 {
-                   
+
                     Ymovement = -10f;
-                   
+
                 }
 
                 if (keyboardState.IsKeyDown(Keys.S))
                 {
-                    
+
                     Ymovement = 10f;
 
                 }
-               
+
             }
             if (isViewingMap)
             {
                 Vector2 newCameraPosition = new Vector2(_position.X, _position.Y + Ymovement);
                 _position = newCameraPosition;
-                
+
             }
             if (!isViewingMap)
             {
                 _position = new Vector2(targetPosition.X, targetPosition.Y);
-                
+
 
             }
 
-            clampMaxforCamera = new Vector2(viewPort.Width, LevelManager._instance.currentLevel.levelLayout.GetLength(0) * 32 - (viewPort.Height / 2));
+            clampMaxforCamera = new Vector2(viewPort.Width, LevelManager._instance.currentLevel.rowCount * SacreBleuGame._instance._tileWidth - (viewPort.Height / 2));
 
             clampMinforCamera = new Vector2(viewPort.Width, viewPort.Height / 2);
 
-                _position = Vector2.Clamp(_position, clampMinforCamera, clampMaxforCamera);
-                var translation = Matrix.CreateTranslation(
-                  -SacreBleuGame._instance._screenWidth / 2,
-                 -_position.Y,
-                  0);
+            _position = Vector2.Clamp(_position, clampMinforCamera, clampMaxforCamera);
+            var translation = Matrix.CreateTranslation(
+              -SacreBleuGame._instance._screenWidth / 2,
+             -_position.Y,
+              0);
 
-                var offset = Matrix.CreateTranslation(
-                    viewPort.Bounds.Width / 2,
-                    viewPort.Bounds.Height / 2,
-                    0);
+            var offset = Matrix.CreateTranslation(
+                viewPort.Bounds.Width / 2,
+                viewPort.Bounds.Height / 2,
+                0);
 
-                Transform = Matrix.Lerp(Transform, translation * offset, 0.1f);
-            
+            Transform = Matrix.Lerp(Transform, translation * offset, 0.1f);
+
 
             previousKeyboardState = keyboardState;
         }

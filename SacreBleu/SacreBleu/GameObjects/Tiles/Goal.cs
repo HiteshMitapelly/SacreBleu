@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SacreBleu.Managers;
 
 namespace SacreBleu.GameObjects
 {
@@ -10,10 +11,6 @@ namespace SacreBleu.GameObjects
         {
             _tag = "Goal";
             _isTrigger = true;
-            _boundsOriginX = _sprite.Width / 4;
-            _boundsOriginY = _sprite.Height / 4;
-            _boundsWidth = _sprite.Width / 2;
-            _boundsHeight = _sprite.Height / 2;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace SacreBleu.GameObjects
             : base(position, sprite)
         {
             _tag = "Obstacle";
-            _tint = Color.Black;
+            _isTrigger = false;
         }
     }
 }

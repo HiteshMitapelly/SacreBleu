@@ -93,10 +93,7 @@ namespace SacreBleu.GameObjects
         }
         public virtual void Draw()
         {
-            //calculate scale multiplier
-            float scale = 32f / _sprite.Width;
-
-            SacreBleuGame._instance._spriteBatch.Draw(_sprite, _position, null, _tint, 0f, Vector2.Zero, _scale, SpriteEffects.None, 0f);
+            SacreBleuGame._instance._spriteBatch.Draw(_sprite, _position, null, _tint, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
 
     }

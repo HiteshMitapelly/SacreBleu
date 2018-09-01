@@ -63,7 +63,7 @@ namespace SacreBleu.GameObjects
 
             previousKeyboardState = keyboardState;
 
-            _position = new Vector2(LevelManager._instance.currentLevel._frog._position.X + LevelManager._instance.currentLevel._frog._sprite.Width / 2, LevelManager._instance.currentLevel._frog._position.Y + LevelManager._instance.currentLevel._frog._sprite.Height / 2);
+            _position = new Vector2(LevelManager._instance.currentLevel._frog._position.X + (LevelManager._instance.currentLevel._frog._sprite.Width * LevelManager._instance.currentLevel._frog._scale) / 2, LevelManager._instance.currentLevel._frog._position.Y + (LevelManager._instance.currentLevel._frog._sprite.Height * LevelManager._instance.currentLevel._frog._scale) / 2);
         }
 
         public override void Draw()

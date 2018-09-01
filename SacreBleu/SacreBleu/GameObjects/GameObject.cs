@@ -19,11 +19,12 @@ namespace SacreBleu.GameObjects
 
         //collision properties
         public Rectangle _bounds;
-        public int _boundsOriginX;
-        public int _boundsOriginY;
-        public int _boundsWidth;
-        public int _boundsHeight;
+        public float _boundsOriginX;
+        public float _boundsOriginY;
+        public float _boundsWidth;
+        public float _boundsHeight;
         public bool _isTrigger;
+        public int layerDepth;
 
         public GameObject(Vector2 position, Texture2D sprite)
         {
@@ -32,25 +33,22 @@ namespace SacreBleu.GameObjects
             _rotation = 0f;
             _sprite = sprite;
             _tint = Color.White;
-            _scale = 1f;
+            _scale = SacreBleuGame._instance.baseScale;
             _boundsOriginX = 0;
             _boundsOriginY = 0;
             _boundsWidth = _sprite.Width;
             _boundsHeight = _sprite.Height;
-            _isTrigger = false;
+            _isTrigger = true;
         }
 
         public Rectangle GetBounds()
         {
-            return new Rectangle((int)_position.X + _boundsOriginX, (int)_position.Y + _boundsOriginY, _boundsWidth, _boundsHeight);
+            return new Rectangle((int)_position.X + (int)_boundsOriginX, (int)_position.Y + (int)_boundsOriginY, (int)(_boundsWidth * _scale), (int)(_boundsHeight * _scale));
         }
 
         public virtual void Draw()
         {
-            //calculate scale multiplier
-            float scale = 32f / _sprite.Width;
-
-            SacreBleuGame._instance._spriteBatch.Draw(_sprite, _position, null, _tint, _rotation, Vector2.Zero, _scale, SpriteEffects.None, 0f);
+            SacreBleuGame._instance._spriteBatch.Draw(_sprite, _position, null, _tint, _rotation, Vector2.Zero, _scale, SpriteEffects.None, layerDepth);
         }
     }
 }

@@ -16,18 +16,25 @@ namespace SacreBleu
         public GraphicsDeviceManager _graphics;
         public SpriteBatch _spriteBatch;
         public int _tileWidth = 32;
+        public float baseScale = 0.0625f;
 
         //managers
         GameManager _gameManager;
+        TileManager _tileManager;
         LevelManager _levelManager;
 
         //camera reference
         public Camera _camera;
 
         //textures
+        public Texture2D basicSquare;
         public Texture2D frogTexture;
         public Texture2D arrowTexture;
-        public Texture2D basicSquare;
+        public Texture2D blackTileTexture;
+        public Texture2D whiteTileTexture;
+        public Texture2D counterTexture;
+        public Texture2D burnerTexture;
+        public Texture2D cuttingBoardTexture;
         public Texture2D goalTexture;
         public Texture2D fireTexture;
         public Texture2D powerBarTexture;
@@ -42,7 +49,7 @@ namespace SacreBleu
 
             _graphics = new GraphicsDeviceManager(this);
 
-            _graphics.PreferredBackBufferWidth = 960;
+            _graphics.PreferredBackBufferWidth = 992;
             _graphics.PreferredBackBufferHeight = 668;
             Content.RootDirectory = "Content";
         }
@@ -65,11 +72,15 @@ namespace SacreBleu
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //load textures
+            basicSquare = Content.Load<Texture2D>("Sprites/Props/white_tile");
             frogTexture = Content.Load<Texture2D>("Sprites/Frog/frog_idle_top");
-            basicSquare = Content.Load<Texture2D>("Sprites/BasicSquare");
             arrowTexture = Content.Load<Texture2D>("Sprites/texture");
-            goalTexture = Content.Load<Texture2D>("Sprites/Props/temp_goal");
-            fireTexture = Content.Load<Texture2D>("Sprites/Props/temp_hazard");
+            blackTileTexture = Content.Load<Texture2D>("Sprites/Props/black_tile");
+            whiteTileTexture = Content.Load<Texture2D>("Sprites/Props/white_tile");
+            counterTexture = Content.Load<Texture2D>("Sprites/Props/gray_tile");
+            burnerTexture = Content.Load<Texture2D>("Sprites/Props/stove burn 1");
+            cuttingBoardTexture = Content.Load<Texture2D>("Sprites/Props/cutting board 2");
+            goalTexture = Content.Load<Texture2D>("Sprites/Props/pan");
             powerBarTexture = Content.Load<Texture2D>("Sprites/UI/PowerBar");
 
             //load fonts
@@ -77,6 +88,7 @@ namespace SacreBleu
 
             //create managers
             _gameManager = new GameManager();
+            _tileManager = new TileManager();
             _levelManager = new LevelManager();
         }
 
@@ -125,7 +137,7 @@ namespace SacreBleu
                     LevelManager._instance.currentLevel._hitbutton.Draw();
                 }
 
-                _spriteBatch.DrawString(SacreBleuGame._instance._levelFont, "Hit Counter : " + LevelManager._instance.currentLevel.numberOfHits.ToString(), LevelManager._instance.currentLevel.counterPosition, Color.Black);
+                _spriteBatch.DrawString(_levelFont, "Hit Counter : " + LevelManager._instance.currentLevel.numberOfHits.ToString(), LevelManager._instance.currentLevel.counterPosition, Color.Black);
                 _spriteBatch.End();
             }
             if (GameManager._instance._currentState == GameManager.GameStates.PAUSED)
@@ -133,14 +145,13 @@ namespace SacreBleu
                 _spriteBatch.Begin();
 
                 _spriteBatch.Draw(LevelManager._instance.currentLevel.pauseMenuContinueButton._sprite, LevelManager._instance.currentLevel.pauseMenuContinueButton._position, Color.Orange);
-                _spriteBatch.DrawString(SacreBleuGame._instance._levelFont, "Continue", LevelManager._instance.currentLevel.pauseMenuContinueButton._position, Color.Black);
+                _spriteBatch.DrawString(_levelFont, "Continue", LevelManager._instance.currentLevel.pauseMenuContinueButton._position, Color.Black);
 
                 _spriteBatch.Draw(LevelManager._instance.currentLevel.pauseMenuRestartButton._sprite, LevelManager._instance.currentLevel.pauseMenuRestartButton._position, Color.Green);
-                _spriteBatch.DrawString(SacreBleuGame._instance._levelFont, "Restart", LevelManager._instance.currentLevel.pauseMenuRestartButton._position, Color.Black);
+                _spriteBatch.DrawString(_levelFont, "Restart", LevelManager._instance.currentLevel.pauseMenuRestartButton._position, Color.Black);
 
                 _spriteBatch.Draw(LevelManager._instance.currentLevel.quitButton._sprite, LevelManager._instance.currentLevel.quitButton._position, Color.Red);
-                _spriteBatch.DrawString(SacreBleuGame._instance._levelFont, "Quit", LevelManager._instance.currentLevel.quitButton._position, Color.Black);
-
+                _spriteBatch.DrawString(_levelFont, "Quit", LevelManager._instance.currentLevel.quitButton._position, Color.Black);
 
                 _spriteBatch.End();
 
@@ -148,16 +159,16 @@ namespace SacreBleu
             if (GameManager._instance._currentState == GameManager.GameStates.WON)
             {
                 _spriteBatch.Begin();
-                _spriteBatch.DrawString(SacreBleuGame._instance._levelFont, "YOU WON", new Vector2(_screenWidth / 2, _screenHeight / 2 - 400f), Color.Yellow);
+                _spriteBatch.DrawString(_levelFont, "YOU WON", new Vector2(_screenWidth / 2, _screenHeight / 2 - 400f), Color.Yellow);
 
                 _spriteBatch.Draw(LevelManager._instance.currentLevel.wonScreenNextLevelButton._sprite, LevelManager._instance.currentLevel.wonScreenNextLevelButton._position, Color.Orange);
-                _spriteBatch.DrawString(SacreBleuGame._instance._levelFont, "Next Level", LevelManager._instance.currentLevel.pauseMenuContinueButton._position, Color.Black);
+                _spriteBatch.DrawString(_levelFont, "Next Level", LevelManager._instance.currentLevel.pauseMenuContinueButton._position, Color.Black);
 
                 _spriteBatch.Draw(LevelManager._instance.currentLevel.wonScreenRetryLevelButton._sprite, LevelManager._instance.currentLevel.wonScreenRetryLevelButton._position, Color.Green);
-                _spriteBatch.DrawString(SacreBleuGame._instance._levelFont, "Retry Level", LevelManager._instance.currentLevel.pauseMenuRestartButton._position, Color.Black);
+                _spriteBatch.DrawString(_levelFont, "Retry Level", LevelManager._instance.currentLevel.pauseMenuRestartButton._position, Color.Black);
 
                 _spriteBatch.Draw(LevelManager._instance.currentLevel.quitButton._sprite, LevelManager._instance.currentLevel.quitButton._position, Color.Red);
-                _spriteBatch.DrawString(SacreBleuGame._instance._levelFont, "Quit", LevelManager._instance.currentLevel.quitButton._position, Color.Black);
+                _spriteBatch.DrawString(_levelFont, "Quit", LevelManager._instance.currentLevel.quitButton._position, Color.Black);
 
 
                 _spriteBatch.End();
