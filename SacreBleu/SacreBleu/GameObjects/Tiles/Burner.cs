@@ -8,7 +8,7 @@ namespace SacreBleu.GameObjects.Tiles
         public Burner(Vector2 position, Texture2D sprite)
             : base(position, sprite)
         {
-            _tag = "Burner";
+
         }
 
         public override void Draw()

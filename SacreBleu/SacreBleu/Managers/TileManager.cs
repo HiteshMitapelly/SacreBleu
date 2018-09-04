@@ -32,7 +32,7 @@ namespace SacreBleu.Managers
                 case 21: // pan
                     return new Goal(position, SacreBleuGame._instance.goalTexture);
                 case 24: // sink
-                    return new Hazard(position, SacreBleuGame._instance.sinkTexture);
+                    return new Obstacle(position, SacreBleuGame._instance.sinkTexture);
                 case 10: // black tile
                     return new Obstacle(position, SacreBleuGame._instance.blackTileTexture);
                 case 11: // white tile

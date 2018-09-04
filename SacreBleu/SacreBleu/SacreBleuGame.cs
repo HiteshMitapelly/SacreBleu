@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using SacreBleu.GameObjects;
 using SacreBleu.Managers;
 
@@ -27,6 +28,8 @@ namespace SacreBleu
         public Camera _camera;
 
         //textures
+        public Texture2D titleTexture;
+
         public Texture2D basicSquare;
         public Texture2D frogTexture;
         public Texture2D arrowTexture;
@@ -49,6 +52,7 @@ namespace SacreBleu
 
         //misc content
         public SpriteFont _levelFont;
+        private Song song;
 
         public SacreBleuGame()
         {
@@ -80,6 +84,8 @@ namespace SacreBleu
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //load textures
+            titleTexture = Content.Load<Texture2D>("Sprites/UI/Open Scene w_UI");
+
             basicSquare = Content.Load<Texture2D>("Sprites/BasicSquare");
             frogTexture = Content.Load<Texture2D>("Sprites/Frog/frog_idle_top");
             arrowTexture = Content.Load<Texture2D>("Sprites/texture");
@@ -102,6 +108,10 @@ namespace SacreBleu
 
             //load fonts
             _levelFont = Content.Load<SpriteFont>("Fonts/Bebas");
+
+            //audio
+            song = Content.Load<Song>("Audio/Bushwick Tarantella Loop");
+            MediaPlayer.Play(song);
 
             //create managers
             _gameManager = new GameManager();
