@@ -47,12 +47,14 @@
     <Compile Include="GameObjects\ButtonGameObject.cs" />
     <Compile Include="GameObjects\DirectionGauge.cs" />
     <Compile Include="GameObjects\Tiles\Burner.cs" />
+    <Compile Include="GameObjects\Tiles\Flour.cs" />
+    <Compile Include="GameObjects\Tiles\Butter.cs" />
     <Compile Include="GameObjects\Tiles\CuttingBoard.cs" />
     <Compile Include="GameObjects\Tiles\Goal.cs" />
     <Compile Include="GameObjects\PowerBar.cs" />
     <Compile Include="GameObjects\Frog.cs" />
     <Compile Include="GameObjects\MoveableGameObject.cs" />
-    <Compile Include="Levels\LevelSandboxTest_02.cs" />
+    <Compile Include="Levels\PrototypeDemo.cs" />
     <Compile Include="Levels\LevelSandboxTest.cs" />
     <Compile Include="Levels\TitleScreen.cs" />
     <Compile Include="Managers\GameManager.cs" />

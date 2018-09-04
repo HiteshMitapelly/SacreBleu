@@ -30,14 +30,22 @@ namespace SacreBleu
         public Texture2D basicSquare;
         public Texture2D frogTexture;
         public Texture2D arrowTexture;
+        public Texture2D powerBarTexture;
+
+        public Texture2D butterBeforeTexture;
+        public Texture2D butterAfterTexture;
+        public Texture2D sinkTexture;
         public Texture2D blackTileTexture;
+        public Texture2D smallBlackTileTexture;
+        public Texture2D smallWhiteTileTexture;
         public Texture2D whiteTileTexture;
-        public Texture2D counterTexture;
+        public Texture2D counterDarkTexture;
+        public Texture2D counterLightTexture;
         public Texture2D burnerTexture;
         public Texture2D cuttingBoardTexture;
         public Texture2D goalTexture;
         public Texture2D fireTexture;
-        public Texture2D powerBarTexture;
+        public Texture2D flourTexture;
 
         //misc content
         public SpriteFont _levelFont;
@@ -72,16 +80,25 @@ namespace SacreBleu
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //load textures
-            basicSquare = Content.Load<Texture2D>("Sprites/Props/white_tile");
+            basicSquare = Content.Load<Texture2D>("Sprites/BasicSquare");
             frogTexture = Content.Load<Texture2D>("Sprites/Frog/frog_idle_top");
             arrowTexture = Content.Load<Texture2D>("Sprites/texture");
-            blackTileTexture = Content.Load<Texture2D>("Sprites/Props/black_tile");
-            whiteTileTexture = Content.Load<Texture2D>("Sprites/Props/white_tile");
-            counterTexture = Content.Load<Texture2D>("Sprites/Props/gray_tile");
-            burnerTexture = Content.Load<Texture2D>("Sprites/Props/stove burn 1");
-            cuttingBoardTexture = Content.Load<Texture2D>("Sprites/Props/cutting board 2");
-            goalTexture = Content.Load<Texture2D>("Sprites/Props/pan");
             powerBarTexture = Content.Load<Texture2D>("Sprites/UI/PowerBar");
+
+            butterBeforeTexture = Content.Load<Texture2D>("Sprites/Props/butter_before");
+            butterAfterTexture = Content.Load<Texture2D>("Sprites/Props/butter_after");
+            sinkTexture = Content.Load<Texture2D>("Sprites/Props/sink");
+            blackTileTexture = Content.Load<Texture2D>("Sprites/Props/tile_black");
+            smallBlackTileTexture = Content.Load<Texture2D>("Sprites/Props/tile_blackSmall");
+            smallWhiteTileTexture = Content.Load<Texture2D>("Sprites/Props/tile_whiteSmall");
+            whiteTileTexture = Content.Load<Texture2D>("Sprites/Props/tile_white");
+            counterDarkTexture = Content.Load<Texture2D>("Sprites/Props/counter_dark");
+            counterLightTexture = Content.Load<Texture2D>("Sprites/Props/counter_light");
+            burnerTexture = Content.Load<Texture2D>("Sprites/Props/burner");
+            cuttingBoardTexture = Content.Load<Texture2D>("Sprites/Props/cuttingBoard");
+            goalTexture = Content.Load<Texture2D>("Sprites/Props/pan");
+            // fireTexture;
+            flourTexture = Content.Load<Texture2D>("Sprites/Props/flour");
 
             //load fonts
             _levelFont = Content.Load<SpriteFont>("Fonts/Bebas");

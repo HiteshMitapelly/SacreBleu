@@ -3,8 +3,8 @@ using Microsoft.Xna.Framework.Input;
 using SacreBleu.GameObjects;
 using SacreBleu.Managers;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-
 
 namespace SacreBleu.Levels
 {
@@ -25,6 +25,7 @@ namespace SacreBleu.Levels
         public Vector2 _frogStartingPosition;
         public Goal _goal;
         public List<GameObject> entities;
+        public List<GameObject> bgEntities;
 
         //UI positions
         public Vector2 counterPosition, pauseMenuContinuePosition, pauseMenuRestartPosition, quitPosition, wonScreenNextLevelPosition, wonScreenRetryLevelPosition;
@@ -62,6 +63,30 @@ namespace SacreBleu.Levels
             par = 0;
 
             entities = new List<GameObject>();
+            bgEntities = new List<GameObject>();
+        }
+
+        protected void CreateBackgroundLayout(string filePath)
+        {
+            List<List<int>> layout = new List<List<int>>();
+            using (StreamReader reader = File.OpenText(filePath))
+            {
+                string currentLine;
+                while ((currentLine = reader.ReadLine()) != null)
+                {
+                    List<int> currentRow = new List<int>();
+                    string[] columns = currentLine.Split(',');
+                    foreach (string cell in columns)
+                    {
+                        int tile = int.Parse(cell.Trim());
+                        currentRow.Add(tile);
+                    }
+
+                    layout.Add(currentRow);
+                }
+            }
+
+            GenerateLevel(layout);
         }
 
         protected void CreateLevelLayout(string filePath)
@@ -89,11 +114,17 @@ namespace SacreBleu.Levels
 
         protected void GenerateLevel(List<List<int>> layout)
         {
-            //1 for background tile
-            //2 for boundary
-            //3 for cutting board
-            //4 for goal
-            //5 for burner
+            //0 = burner
+            //19 = butter_before
+            //3 = counter_dark
+            //4 = counter_light
+            //20 = cutting_board
+            //23 = flour
+            //21 = garnished_plate
+            //22 = pan
+            //24 = sink
+            //10 = black_tile
+            //11 = white_tile
             rowCount = layout.Count;
             for (int i = 0; i < layout.Count; i++)
             {
@@ -115,6 +146,21 @@ namespace SacreBleu.Levels
                 }
                 else if (g != null && g._tag.Equals("Goal"))
                     _goal = (Goal)g;
+            }
+        }
+
+        protected void GenerateBackground(List<List<int>> layout)
+        {
+            rowCount = layout.Count;
+            for (int i = 0; i < layout.Count; i++)
+            {
+                List<int> currentRow = layout[i];
+                for (int j = 0; j < currentRow.Count; j++)
+                {
+                    Vector2 tilePosition = new Vector2(j * SacreBleuGame._instance._tileWidth, i * SacreBleuGame._instance._tileWidth);
+
+                    bgEntities.Add(TileManager.Instance.CreateTile(currentRow[j], tilePosition));
+                }
             }
         }
 
@@ -150,7 +196,7 @@ namespace SacreBleu.Levels
 
                     GameManager._instance._currentState = GameManager.GameStates.READY;
                     numberOfHits = 0;
-                    RestartLevel();
+                    ResetFrog();
                 }
                 if (quitButton.CurrentButtonState() == ButtonState.Pressed)
                 {
@@ -171,7 +217,7 @@ namespace SacreBleu.Levels
 
                     GameManager._instance._currentState = GameManager.GameStates.READY;
                     numberOfHits = 0;
-                    RestartLevel();
+                    ResetFrog();
                 }
                 if (quitButton.CurrentButtonState() == ButtonState.Pressed)
                 {
@@ -188,6 +234,26 @@ namespace SacreBleu.Levels
                 return _goal;
 
             foreach (GameObject g in entities)
+            {
+                if (g != null && (g.GetBounds().Intersects(boundsToCheck)))
+                {
+                    if (g._tag.Equals("Obstacle") || g._tag.Equals("Hazard"))
+                        return g;
+                    else if (g._tag.Equals("Butter"))
+                    {
+                        Debug.WriteLine("butter");
+                        _frog.buttered = true;
+                        _frog.floured = false;
+                    }
+                    else if (g._tag.Equals("Flour"))
+                    {
+                        Debug.WriteLine("flour");
+                        _frog.buttered = false;
+                        _frog.floured = true;
+                    }
+                }
+            }
+            foreach (GameObject g in bgEntities)
             {
                 if (g != null && (g._tag.Equals("Obstacle") || g._tag.Equals("Hazard")))
                 {
@@ -241,7 +307,7 @@ namespace SacreBleu.Levels
                 }
                 else if (objectOverlapping._tag.Equals("Hazard"))
                 {
-                    RestartLevel();
+                    ResetFrog();
                 }
                 else if (_goal != null && objectOverlapping._tag.Equals("Goal"))
                 {
@@ -259,9 +325,9 @@ namespace SacreBleu.Levels
             return new Rectangle((int)positionToTry.X, (int)positionToTry.Y, width, height);
         }
 
-        private void RestartLevel()
+        private void ResetFrog()
         {
-            _frog.Death(_frogStartingPosition);
+            _frog.Death();
             _directionGauge._angle = 0f;
         }
 
@@ -271,6 +337,11 @@ namespace SacreBleu.Levels
             if (GameManager._instance._currentState == GameManager.GameStates.READY)
             {
                 foreach (GameObject g in entities)
+                {
+                    if (g != null)
+                        g.Draw();
+                }
+                foreach (GameObject g in bgEntities)
                 {
                     if (g != null)
                         g.Draw();

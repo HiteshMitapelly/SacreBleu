@@ -29,6 +29,13 @@ namespace SacreBleu.GameObjects
         Vector2 _lineVector;
         float angle;
 
+        Vector2 previousPosition;
+
+        float baseDrag;
+        float butterDrag = 0.007f;
+        float flourDrag = 0.03f;
+        public bool buttered;
+        public bool floured;
 
         bool inRange;
 
@@ -48,14 +55,29 @@ namespace SacreBleu.GameObjects
             _scale *= 2;
 
             _currentState = States.IDLE;
+
+            previousPosition = position;
+            baseDrag = _drag;
         }
 
         public override void Update(GameTime gameTime)
         {
+            if (floured)
+                _drag = flourDrag;
+            else if (buttered)
+                _drag = butterDrag;
+            else
+                _drag = baseDrag;
+
             if (_velocity.Length() > 0f && _currentState != States.TRAVELLING)
                 _currentState = States.TRAVELLING;
             else if (_velocity.Length() == 0f && _currentState == States.TRAVELLING)
+            {
+                previousPosition = _position;
+                floured = false;
+                buttered = false;
                 _currentState = States.IDLE;
+            }
 
             _mousePosition = new Vector2(mouseState.X, mouseState.Y);
 
@@ -96,11 +118,11 @@ namespace SacreBleu.GameObjects
             base.Update(gameTime);
         }
 
-        public void Death(Vector2 respawnPosition)
+        public void Death()
         {
             _currentState = States.DEAD;
             _velocity = Vector2.Zero;
-            _position = respawnPosition;
+            _position = previousPosition;
             _currentState = States.IDLE;
         }
 
