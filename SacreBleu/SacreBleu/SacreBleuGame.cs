@@ -97,7 +97,7 @@ namespace SacreBleu
             burnerTexture = Content.Load<Texture2D>("Sprites/Props/burner");
             cuttingBoardTexture = Content.Load<Texture2D>("Sprites/Props/cuttingBoard");
             goalTexture = Content.Load<Texture2D>("Sprites/Props/pan");
-            // fireTexture;
+            fireTexture = Content.Load<Texture2D>("Sprites/Props/flame");
             flourTexture = Content.Load<Texture2D>("Sprites/Props/flour");
 
             //load fonts

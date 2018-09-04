@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Input;
 using SacreBleu.GameObjects;
 using SacreBleu.Managers;
-using System.Collections.Generic;
 
 namespace SacreBleu.Levels
 {
@@ -29,8 +28,8 @@ namespace SacreBleu.Levels
         public override void Draw()
         {
             //base.Draw();
-            SacreBleuGame._instance._spriteBatch.Draw(startGameButton._sprite, startGameButtonPosition, Color.DarkBlue);
-            SacreBleuGame._instance._spriteBatch.DrawString(SacreBleuGame._instance._levelFont, "Start Game", startGameButtonPosition, Color.Black);
+            SacreBleuGame._instance._spriteBatch.Draw(startGameButton._sprite, startGameButtonPosition, Color.White);
+            SacreBleuGame._instance._spriteBatch.DrawString(SacreBleuGame._instance._levelFont, "Start Game", new Vector2(startGameButtonPosition.X, startGameButtonPosition.Y + 32), Color.Black);
         }
     }
 }

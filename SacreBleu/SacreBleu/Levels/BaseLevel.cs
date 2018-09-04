@@ -142,7 +142,7 @@ namespace SacreBleu.Levels
                 if (g != null && g._tag.Equals("Cutting Board"))
                 {
                     _frogStartingPosition = g._position;
-                    _frog = new Frog(g._position, SacreBleuGame._instance.frogTexture, 0.015f, 0.75f);
+                    _frog = new Frog(new Vector2(g._position.X + 64, g._position.Y + 28), SacreBleuGame._instance.frogTexture, 0.015f, 0.75f);
                 }
                 else if (g != null && g._tag.Equals("Goal"))
                     _goal = (Goal)g;

@@ -18,7 +18,7 @@ namespace SacreBleu.Managers
             switch (tile)
             {
                 case 0: // burner
-                    return new Hazard(position, SacreBleuGame._instance.burnerTexture);
+                    return new Burner(position, SacreBleuGame._instance.burnerTexture);
                 case 19: // butter
                     return new Butter(position, SacreBleuGame._instance.butterBeforeTexture);
                 case 3: // counter dark
