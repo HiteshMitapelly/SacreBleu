@@ -22,8 +22,7 @@ namespace SacreBleu.Managers
             titleScreen = new TitleScreen();
             levels = new List<BaseLevel>
             {
-                new PrototypeDemo(),
-                new LevelSandboxTest(),
+                new PrototypeDemo()
         };
 
             currentLevel = titleScreen;

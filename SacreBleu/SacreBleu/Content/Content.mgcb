@@ -278,3 +278,9 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/UI/Open Scene w_UI.png
 
+#begin Levels/SacreBleu_demo_prototype_Demo.csv
+/copy:Levels/SacreBleu_demo_prototype_Demo.csv
+
+#begin Levels/SacreBleu_demo_Tile Layer 2.csv
+/copy:Levels/SacreBleu_demo_Tile Layer 2.csv
+

@@ -22,7 +22,7 @@ namespace SacreBleu.GameObjects
         Vector2 worldPosition;
 
 
-        public float _maxVelocity = 25f;
+        public float _maxVelocity = 17f;
         bool dragging;
         MouseState oldMouseState;
         Rectangle _line;

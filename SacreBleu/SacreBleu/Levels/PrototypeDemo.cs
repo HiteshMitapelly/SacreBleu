@@ -2,8 +2,8 @@
 {
     class PrototypeDemo : BaseLevel
     {
-        private string backgroundFile = @"..\..\..\..\TiledFiles\ExportedMaps\SacreBleu_demo_prototype_Demo.csv";
-        private string levelFile = @"..\..\..\..\TiledFiles\ExportedMaps\SacreBleu_demo_Tile Layer 2.csv";
+        private string backgroundFile = @"Content\Levels\SacreBleu_demo_prototype_Demo.csv";
+        private string levelFile = @"Content\Levels\SacreBleu_demo_Tile Layer 2.csv";
 
         public PrototypeDemo() : base()
         {
